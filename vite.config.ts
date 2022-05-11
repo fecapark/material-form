@@ -1,12 +1,12 @@
 import { defineConfig } from "vite";
 
-const PORT = 3000;
+const PORT: number = 3000;
 
-function getCodeServerCWD() {
+function getCodeServerCWD(): string {
   return `/proxy/${PORT}/`;
 }
 
-export default defineConfig(({ command, _ }) => {
+export default defineConfig(({ command }) => {
   if (command === "serve") {
     return {
       base: getCodeServerCWD(),
