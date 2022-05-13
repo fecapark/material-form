@@ -1,11 +1,7 @@
 import "./App.scss";
 
 export default class App {
-  target: HTMLDivElement;
-
-  constructor(target: HTMLDivElement) {
-    this.target = target;
-
+  constructor(readonly target: HTMLDivElement) {
     this.renderApp();
   }
 
