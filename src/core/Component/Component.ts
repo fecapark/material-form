@@ -1,16 +1,35 @@
-export default class Component {
-  id: string;
-  container: HTMLElement;
-  private state: object = {};
+import Store from "../Store/Store";
 
-  constructor(tagName: string, id?: string) {
+type ContainerInfos = {
+  tagName?: string;
+  id?: string;
+  classNames?: Array<string>;
+};
+
+export default class Component {
+  container: HTMLElement;
+  id: string;
+  classNames: Array<string>;
+
+  constructor(
+    public store: Store,
+    { tagName, id, classNames }: ContainerInfos = {}
+  ) {
     this.id = id ?? "";
-    this.container = this.createContainer(tagName);
+    this.classNames = classNames ?? [];
+    this.container = this.createContainer(tagName ?? "div");
+
+    store.eventManager.subscribe("stateChange", () => this.render());
   }
 
-  createContainer(tagName: string) {
-    this.container = document.createElement(tagName);
-    this.container.id = this.id;
+  createContainer(tagName: string): HTMLElement {
+    const container = document.createElement(tagName);
+    container.id = this.id;
+    this.classNames.forEach((aClassName) => {
+      container.classList.add(aClassName);
+    });
+
+    return container;
   }
 
   removeAllChilds() {
@@ -21,30 +40,7 @@ export default class Component {
     }
   }
 
-  setState(stateObject = {}) {
-    Object.entries(stateObject).forEach(([stateName, nextValue]) => {
-      this.state[stateName] = nextValue;
-    });
-
-    if (this.container) this.removeAllChilds();
-
-    this.render();
-  }
-
   render() {
-    throw Error("Please define 'render' method in component.");
-  }
-
-  createContainer(classNames: Array<string>, ...childs: Array<HTMLElement>) {
-    if (!this.container) {
-      this.container = document.createElement("div");
-    } else {
-      this.removeAllChilds();
-    }
-
-    if (this.id !== "") this.container.id = this.id;
-
-    classNames.forEach((className) => this.container.classList.add(className));
-    childs.forEach((aChild) => this.container.appendChild(aChild));
+    throw Error("You must implement render method in component instance.");
   }
 }
