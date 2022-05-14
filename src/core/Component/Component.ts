@@ -7,19 +7,18 @@ type ContainerInfos = {
 };
 
 export default class Component {
+  store: Store;
   container: HTMLElement;
   id: string;
   classNames: Array<string>;
 
-  constructor(
-    public store: Store,
-    { tagName, id, classNames }: ContainerInfos = {}
-  ) {
+  constructor({ tagName, id, classNames }: ContainerInfos = {}) {
     this.id = id ?? "";
     this.classNames = classNames ?? [];
     this.container = this.createContainer(tagName ?? "div");
 
-    store.eventManager.subscribe("stateChange", () => this.render());
+    this.store = new Store();
+    this.store.eventManager.subscribe("stateChange", () => this.render());
   }
 
   createContainer(tagName: string): HTMLElement {
