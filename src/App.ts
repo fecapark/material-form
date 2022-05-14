@@ -23,7 +23,6 @@ class Dummy extends Component {
     this.store.setAction(
       "increaseNumber",
       (state: StoreType.State, payload: StoreType.Payload): StoreType.State => {
-        console.log(payload);
         return { "dummy-number": state["dummy-number"] + 1 };
       }
     );
