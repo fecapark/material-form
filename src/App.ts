@@ -34,8 +34,6 @@ export default class App {
     const { proxy, path }: { proxy: string; path: string } =
       ROUTES.splitProxyPath(window.location.pathname);
 
-    console.log(proxy);
-
     ROUTES.PROXY_ROOT_PATH = proxy;
     ROUTES.view(path);
   }

@@ -40,8 +40,6 @@ export default class Router {
   }
 
   execute() {
-    console.log("router executed! : Router/execute()");
-
     const routeTriggerEvent = new CustomEvent("routetrigger", {
       composed: true,
       detail: { href: this.targetRoute },
@@ -55,8 +53,6 @@ export default class Router {
   }
 
   renderViewWhenRouteTriggered(e: CustomEvent) {
-    console.log("route event triggered! : Router/renderwhen....()");
-
     const { href }: { href: string } = e.detail;
 
     window.history.pushState(null, "", `${ROUTES.PROXY_ROOT_PATH}${href}`);
