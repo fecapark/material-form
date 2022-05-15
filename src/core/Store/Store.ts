@@ -42,7 +42,7 @@ export default class Store {
 
   setAction(actionType: string, action: StoreType.Action) {
     const actionWrapper = (payload: StoreType.Payload): StoreType.State => {
-      return this.mergeState(action({ ...this.state }, payload));
+      return this.mergeState(action({ state: { ...this.state }, payload }));
     };
 
     this.actions[actionType] = actionWrapper;

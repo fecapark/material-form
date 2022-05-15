@@ -9,6 +9,12 @@ declare module "Store-Type" {
     type State = Record<string, any>;
     type Payload = Record<string, any>;
     type PayloadFunction<T> = (payload: Payload) => T;
-    type Action = (state: State, payload: Payload) => State;
+    type Action = ({
+      state,
+      payload,
+    }: {
+      state: State;
+      payload: Payload;
+    }) => State;
   }
 }

@@ -62,7 +62,7 @@ class Dummy extends Component {
     this.store.setState("dummy-number", 0);
     this.store.setAction(
       "increaseNumber",
-      (state: StoreType.State, payload: StoreType.Payload): StoreType.State => {
+      ({ state }: { state: StoreType.State }): StoreType.State => {
         return { "dummy-number": state["dummy-number"] + 1 };
       }
     );
@@ -80,7 +80,7 @@ class Dummy extends Component {
 
     const button: HTMLButtonElement = this.container.querySelector("button")!;
     button.addEventListener("click", () => {
-      this.store.dispatch("increaseNumber", { test: "this is test!" });
+      this.store.dispatch("increaseNumber", {});
     });
   }
 }
