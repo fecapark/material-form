@@ -11,6 +11,8 @@ export default class App {
   routerComponent: RouterComponent;
 
   constructor(readonly target: HTMLDivElement) {
+    console.log("App constructor started!");
+
     this.globalStore = new Store();
     this.dummyComponent = new Dummy();
     this.routerComponent = new RouterComponent();
@@ -34,7 +36,7 @@ export default class App {
     const { proxy, path }: { proxy: string; path: string } =
       ROUTES.splitProxyPath(window.location.pathname);
 
-    console.log(proxy, path);
+    console.log("dispatch route: ", proxy, path);
 
     ROUTES.PROXY_ROOT_PATH = proxy;
     ROUTES.view(path);
