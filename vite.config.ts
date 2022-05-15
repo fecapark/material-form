@@ -1,22 +1,18 @@
 import { defineConfig } from "vite";
 
-const PORT: number = 3000;
-
-function getCodeServerCWD(): string {
-  return `/proxy/${PORT}/`;
-}
-
 export default defineConfig(({ command }) => {
+  require("dotenv").config({ path: "./.env" }); // Import dotenv
+
   if (command === "serve") {
     return {
-      base: getCodeServerCWD(),
+      base: `/proxy/${process.env.VITE_CODE_SERVER_DEV_PORT}/`,
       server: {
-        port: PORT,
+        port: parseInt(process.env.VITE_CODE_SERVER_DEV_PORT),
       },
     };
   } else {
     return {
-      base: "/material-todo-list/",
+      base: process.env.VITE_GH_PAGES_PATH,
     };
   }
 });

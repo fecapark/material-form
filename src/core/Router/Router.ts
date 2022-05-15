@@ -9,7 +9,7 @@ export default class Router {
   static globalEventSetted: boolean = false;
   targetRoute: string;
 
-  constructor(readonly target: HTMLElement, eventType: string = "click") {
+  constructor(readonly target: HTMLAnchorElement, eventType: string = "click") {
     this.targetRoute = this.getRouterDataFromElement(this.target);
     this.target.addEventListener(eventType, this.execute.bind(this));
 
@@ -30,16 +30,19 @@ export default class Router {
     );
   }
 
-  getRouterDataFromElement(target: HTMLElement): string {
-    const { route } = target.dataset;
+  getRouterDataFromElement(target: HTMLAnchorElement): string {
+    const route: string = target.getAttribute("href")!;
+    console.log("href route: ", route, " from ", target);
 
-    if (!route)
-      throw Error("Router must be setted html attribute 'data-route'.");
+    if (route === "")
+      throw Error("Router must be setted html attribute 'href'.");
 
     return route;
   }
 
-  execute() {
+  execute(e: Event) {
+    e.preventDefault(); // Prevent anchor redirect event
+
     const routeTriggerEvent = new CustomEvent("routetrigger", {
       composed: true,
       detail: { href: this.targetRoute },
@@ -49,13 +52,24 @@ export default class Router {
   }
 
   renderViewWhenPopState() {
-    ROUTES.view(window.location.pathname);
+    // Todo: 리팩토링하기. 어떤게 들어와도 #가 1개만 있어야 함.
+    let hashPath: string;
+    if (window.location.hash.startsWith("##")) {
+      hashPath = window.location.hash.replace("#", "");
+    } else {
+      hashPath = window.location.hash;
+    }
+
+    console.log("hash path: ", hashPath, window.location.hash);
+    ROUTES.view(hashPath !== "" ? hashPath : "#");
   }
 
   renderViewWhenRouteTriggered(e: CustomEvent) {
     const { href }: { href: string } = e.detail;
 
-    window.history.pushState(null, "", `${ROUTES.PROXY_ROOT_PATH}${href}`);
+    console.log("to pushstate: ", `${ROUTES.ROOT_PATH}${href}`);
+
+    window.history.pushState(null, "", `${ROUTES.ROOT_PATH}${href}`);
     ROUTES.view(href);
   }
 }

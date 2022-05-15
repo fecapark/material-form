@@ -15,14 +15,18 @@ const defaultView = (): void => {
 };
 
 export class ROUTES {
-  static PROXY_ROOT_PATH: string = "";
+  static ROOT_PATH: string = "";
   static INFO: Record<string, RouteInfo> = {
-    "/": {
+    "#": {
       name: "home",
       view: defaultView,
     },
-    "/signin": {
+    "#signin": {
       name: "signin",
+      view: defaultView,
+    },
+    "#dummy": {
+      name: "dummy",
       view: defaultView,
     },
   };
@@ -42,14 +46,16 @@ export class ROUTES {
 
   static view(viewPath: string) {
     const { path }: { path: string } = this.splitProxyPath(viewPath);
+    const hashedPath = path.replace("/", "#");
 
-    if (!this.INFO.hasOwnProperty(path)) {
-      console.log(path);
+    console.log("finally render path: ", hashedPath);
+
+    if (!this.INFO.hasOwnProperty(hashedPath)) {
       this.view404();
       return;
     }
 
-    this.INFO[path].view();
+    this.INFO[hashedPath].view();
   }
 
   static splitProxyPath(path: string): SplitedProxyPath {

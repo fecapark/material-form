@@ -12,6 +12,7 @@ export default class App {
 
   constructor(readonly target: HTMLDivElement) {
     console.log("App constructor started!");
+    console.log("12345".slice(0, 5));
 
     this.globalStore = new Store();
     this.dummyComponent = new Dummy();
@@ -22,13 +23,17 @@ export default class App {
   }
 
   setViews() {
-    ROUTES.setViewTo("/", () => {
+    ROUTES.setViewTo("#", () => {
       this.target.appendChild(this.dummyComponent.container);
       this.target.appendChild(this.routerComponent.container);
     });
-    ROUTES.setViewTo("/signin", () => {
-      this.target.innerHTML = "";
-      this.target.textContent = "Sign in!";
+    ROUTES.setViewTo("#signin", () => {
+      this.target.innerHTML = "wow";
+      this.target.innerHTML = "<a class='router' href='#dummy'>Dummy!</a>";
+      new Router(this.target.querySelector(".router")!);
+    });
+    ROUTES.setViewTo("#dummy", () => {
+      this.target.innerHTML = "Dummy reached!";
     });
   }
 
@@ -38,7 +43,21 @@ export default class App {
 
     console.log("dispatch route: ", proxy, path);
 
-    ROUTES.PROXY_ROOT_PATH = proxy;
+    if (proxy !== "") {
+      ROUTES.ROOT_PATH = proxy;
+    } else if (path === import.meta.env.VITE_GH_PAGES_PATH) {
+      const _parsedPath = path.slice(
+        import.meta.env.VITE_GH_PAGES_PATH.length,
+        path.length
+      );
+      let parsedPath = _parsedPath.replace("/", "#");
+
+      console.log("render path: ", parsedPath);
+      ROUTES.ROOT_PATH = parsedPath;
+      ROUTES.view(parsedPath ? parsedPath : "#");
+      return;
+    }
+
     ROUTES.view(path);
   }
 }
@@ -52,7 +71,7 @@ class RouterComponent extends Component {
 
   render() {
     this.container.innerHTML = `
-      <div class="route" data-route="/signin">Go sign in -></div>
+      <a class="route" href="#signin">Go sign in -></a>
     `;
 
     new Router(this.container.querySelector(".route")!);
