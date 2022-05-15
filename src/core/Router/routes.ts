@@ -42,6 +42,13 @@ export class ROUTES {
 
   static view(viewPath: string) {
     const { path }: { path: string } = this.splitProxyPath(viewPath);
+
+    if (!this.INFO.hasOwnProperty(path)) {
+      console.log(path);
+      this.view404();
+      return;
+    }
+
     this.INFO[path].view();
   }
 
@@ -55,5 +62,10 @@ export class ROUTES {
     }
 
     return { proxy: proxyPath, path };
+  }
+
+  static view404() {
+    const app: HTMLElement = document.getElementById("app")!;
+    app.innerHTML = "404 Page not found.";
   }
 }
