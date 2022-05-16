@@ -11,9 +11,6 @@ export default class App {
   routerComponent: RouterComponent;
 
   constructor(readonly target: HTMLDivElement) {
-    console.log("App constructor started!");
-    console.log("12345".slice(0, 5));
-
     this.globalStore = new Store();
     this.dummyComponent = new Dummy();
     this.routerComponent = new RouterComponent();
@@ -38,27 +35,16 @@ export default class App {
   }
 
   dispatchInitialRoute() {
-    const { proxy, path }: { proxy: string; path: string } =
-      ROUTES.splitProxyPath(window.location.pathname);
+    const { proxy }: { proxy: string } = ROUTES.splitProxyPath(
+      window.location.pathname
+    );
 
-    console.log("dispatch route: ", proxy, path);
-
+    // For proxy server
     if (proxy !== "") {
-      ROUTES.ROOT_PATH = proxy;
-    } else if (path === import.meta.env.VITE_GH_PAGES_PATH) {
-      const _parsedPath = path.slice(
-        import.meta.env.VITE_GH_PAGES_PATH.length,
-        path.length
-      );
-      let parsedPath = _parsedPath.replace("/", "#");
-
-      console.log("render path: ", parsedPath);
-      ROUTES.ROOT_PATH = parsedPath;
-      ROUTES.view(parsedPath ? parsedPath : "#");
-      return;
+      ROUTES.ROOT_PATH = `${proxy}/`;
     }
 
-    ROUTES.view(path);
+    ROUTES.view(window.location.hash);
   }
 }
 

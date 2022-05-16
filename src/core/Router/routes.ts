@@ -45,17 +45,14 @@ export class ROUTES {
   }
 
   static view(viewPath: string) {
-    const { path }: { path: string } = this.splitProxyPath(viewPath);
-    const hashedPath = path.replace("/", "#");
+    const path = viewPath ? viewPath : "#";
 
-    console.log("finally render path: ", hashedPath);
-
-    if (!this.INFO.hasOwnProperty(hashedPath)) {
+    if (!this.INFO.hasOwnProperty(path)) {
       this.view404();
       return;
     }
 
-    this.INFO[hashedPath].view();
+    this.INFO[path].view();
   }
 
   static splitProxyPath(path: string): SplitedProxyPath {
