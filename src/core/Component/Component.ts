@@ -7,15 +7,19 @@ type ContainerInfos = {
 };
 
 export default class Component {
-  store: Store;
-  container: HTMLElement;
+  protected readonly store: Store;
+  readonly container: HTMLElement;
   id: string;
   classNames: Array<string>;
 
-  constructor({ tagName, id, classNames }: ContainerInfos = {}) {
-    this.id = id ?? "";
-    this.classNames = classNames ?? [];
-    this.container = this.createContainer(tagName ?? "div");
+  constructor({
+    tagName = "div",
+    id = "",
+    classNames = [],
+  }: ContainerInfos = {}) {
+    this.id = id;
+    this.classNames = classNames;
+    this.container = this.createContainer(tagName);
 
     this.store = new Store();
     this.store.eventManager.subscribe("stateChange", () => this.render());
@@ -29,14 +33,6 @@ export default class Component {
     });
 
     return container;
-  }
-
-  removeAllChilds() {
-    if (!this.container) return;
-
-    while (this.container.firstChild) {
-      this.container.removeChild(this.container.firstChild);
-    }
   }
 
   render() {

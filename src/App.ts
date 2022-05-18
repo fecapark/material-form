@@ -68,7 +68,7 @@ class Dummy extends Component {
   constructor() {
     super({ classNames: ["dummy-container"] });
 
-    this.store.setState("dummy-number", 0);
+    this.store.setDefaultState("dummy-number", 0);
     this.store.setAction(
       "increaseNumber",
       ({ state }: { state: StoreType.State }): StoreType.State => {

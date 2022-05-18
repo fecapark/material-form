@@ -21,7 +21,7 @@ export default class Store {
       state: StoreType.State,
       key: string,
       value: any
-    ) => {
+    ): boolean => {
       state[key] = value;
 
       if (!this.preventPublish) {
@@ -34,7 +34,7 @@ export default class Store {
     this.state = new Proxy({}, { set: setStateHandler });
   }
 
-  setState(accessKey: string, defaultValue: any) {
+  setDefaultState(accessKey: string, defaultValue: any) {
     this.preventPublish = true;
     this.state[accessKey] = defaultValue;
     this.preventPublish = false;
@@ -42,7 +42,12 @@ export default class Store {
 
   setAction(actionType: string, action: StoreType.Action) {
     const actionWrapper = (payload: StoreType.Payload): StoreType.State => {
-      return this.mergeState(action({ state: { ...this.state }, payload }));
+      const actionResultState: StoreType.State = action({
+        state: { ...this.state },
+        payload,
+      });
+
+      return this.mergeState(actionResultState);
     };
 
     this.actions[actionType] = actionWrapper;
@@ -57,7 +62,7 @@ export default class Store {
     this.state = this.actions[actionType](payload);
   }
 
-  mergeState(state: StoreType.State) {
+  mergeState(state: StoreType.State): StoreType.State {
     return Object.assign(this.state, state);
   }
 

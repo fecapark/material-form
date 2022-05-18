@@ -2,9 +2,12 @@ import { ROUTES } from "./routes";
 
 export default class Router {
   static globalEventSetted: boolean = false;
-  targetRoute: string;
+  private targetRoute: string;
 
-  constructor(readonly target: HTMLAnchorElement, eventType: string = "click") {
+  constructor(
+    private readonly target: HTMLAnchorElement,
+    eventType: string = "click"
+  ) {
     this.targetRoute = this.getRouterDataFromElement(this.target);
     this.target.addEventListener(eventType, this.execute.bind(this));
 

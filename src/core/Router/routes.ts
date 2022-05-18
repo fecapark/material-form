@@ -1,14 +1,5 @@
 import { Nullable } from "global-types";
-
-interface RouteInfo {
-  name: string;
-  view: () => void;
-}
-
-interface SplitedProxyPath {
-  proxy: string;
-  path: string;
-}
+import { Routes } from "Router-Type";
 
 const defaultView = (): void => {
   throw Error("Please set view action to routes.");
@@ -16,7 +7,7 @@ const defaultView = (): void => {
 
 export class ROUTES {
   static ROOT_PATH: string = "";
-  static INFO: Record<string, RouteInfo> = {
+  private static INFO: Record<string, Routes.RouteInfo> = {
     "#": {
       name: "home",
       view: defaultView,
@@ -55,7 +46,9 @@ export class ROUTES {
     this.INFO[path].view();
   }
 
-  static splitProxyPath(path: string): SplitedProxyPath {
+  static splitProxyPath(path: string): Routes.SplitedProxyPath {
+    //  뭔지는 모르겠는데 지저분함.
+
     let proxyPath: string = "";
     const startsWithProxyPath: RegExp = new RegExp("^\\/proxy\\/\\d+");
 
