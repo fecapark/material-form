@@ -1,8 +1,8 @@
 import { defineConfig } from "vite";
 
-export default defineConfig(({ command }) => {
-  require("dotenv").config({ path: "./.env" }); // Import dotenv
+require("dotenv").config({ path: "./.env" }); // Import dotenv
 
+export default defineConfig(({ command }) => {
   if (command === "serve") {
     return {
       base: `/proxy/${process.env.VITE_CODE_SERVER_DEV_PORT}/`,
@@ -10,9 +10,9 @@ export default defineConfig(({ command }) => {
         port: parseInt(process.env.VITE_CODE_SERVER_DEV_PORT),
       },
     };
-  } else {
-    return {
-      base: process.env.VITE_GH_PAGES_PATH,
-    };
   }
+
+  return {
+    base: process.env.VITE_DEPLOY_PATH,
+  };
 });

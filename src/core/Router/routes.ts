@@ -47,17 +47,13 @@ export class ROUTES {
   }
 
   static splitProxyPath(path: string): Routes.SplitedProxyPath {
-    //  뭔지는 모르겠는데 지저분함.
+    const proxyPathRegex: RegExp = new RegExp("(\\/proxy\\/\\d+)+");
+    const proxyPath = path.match(proxyPathRegex);
 
-    let proxyPath: string = "";
-    const startsWithProxyPath: RegExp = new RegExp("^\\/proxy\\/\\d+");
-
-    while (path.match(startsWithProxyPath)) {
-      proxyPath += path.match(startsWithProxyPath)![0];
-      path = path.replace(startsWithProxyPath, "");
-    }
-
-    return { proxy: proxyPath, path };
+    return {
+      proxy: proxyPath ? proxyPath[0] : "",
+      path: path.replace(proxyPathRegex, ""),
+    };
   }
 
   static view404() {
