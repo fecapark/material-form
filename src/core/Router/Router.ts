@@ -1,7 +1,7 @@
 import { ROUTES } from "./routes";
 
 export default class Router {
-  static globalEventSetted: boolean = false;
+  private static globalEventSetted: boolean = false;
   private targetRoute: string;
 
   constructor(
@@ -51,8 +51,6 @@ export default class Router {
 
   renderViewWhenRouteTriggered(e: CustomEvent) {
     const { href }: { href: string } = e.detail;
-
-    window.history.pushState(null, "", `${ROUTES.ROOT_PATH}${href}`);
-    ROUTES.view(href);
+    ROUTES.viewWithRedirect(href);
   }
 }

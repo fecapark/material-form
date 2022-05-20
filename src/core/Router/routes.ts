@@ -1,6 +1,10 @@
 import { Nullable } from "global-types";
 import { Routes } from "Router-Type";
 
+const parseHashPath = (toParse: string): string => {
+  return toParse.startsWith("#") ? toParse : `#${toParse}`;
+};
+
 const defaultView = (): void => {
   throw Error("Please set view action to routes.");
 };
@@ -32,7 +36,7 @@ export class ROUTES {
   }
 
   static view(viewPath: string) {
-    const path = viewPath ? viewPath : "#";
+    const path = parseHashPath(viewPath);
 
     if (!this.INFO.hasOwnProperty(path)) {
       this.view404();
@@ -40,6 +44,13 @@ export class ROUTES {
     }
 
     this.INFO[path].view();
+  }
+
+  static viewWithRedirect(viewPath: string) {
+    const path = parseHashPath(viewPath);
+
+    window.history.pushState(null, "", `${ROUTES.ROOT_PATH}${path}`);
+    this.view(path);
   }
 
   static view404() {
