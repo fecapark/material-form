@@ -1,10 +1,14 @@
 import "./App.scss";
 import Store from "./core/Store/Store";
 import { ROUTES } from "./core/Router/routes";
+import InitialLogo from "./components/InitialLogo/InitialLogo";
 
 export default class App {
   globalStore: Store;
   logined: boolean;
+
+  // Component types
+  initialLogo!: InitialLogo;
 
   constructor(readonly target: HTMLDivElement) {
     this.globalStore = new Store();
@@ -12,10 +16,17 @@ export default class App {
     // Test parameters
     this.logined = false;
 
+    // Render components
+    this.preRenderComponents();
+
     // Set routes
     this.setViews();
     ROUTES.setInitialRootPath();
     ROUTES.view(window.location.hash);
+  }
+
+  preRenderComponents() {
+    this.initialLogo = new InitialLogo();
   }
 
   setViews() {
@@ -29,10 +40,11 @@ export default class App {
       return;
     }
 
-    this.target.innerHTML = "Welcome! You logined!";
+    // Todo: render logo
+    this.target.innerHTML = "Welcome! logined!";
   }
 
   renderSignIn() {
-    this.target.innerHTML = "Here is signin.";
+    this.target.appendChild(this.initialLogo.container);
   }
 }
