@@ -16,10 +16,6 @@ export class ROUTES {
       name: "signin",
       view: defaultView,
     },
-    "#dummy": {
-      name: "dummy",
-      view: defaultView,
-    },
   };
 
   static setViewTo(
@@ -46,6 +42,11 @@ export class ROUTES {
     this.INFO[path].view();
   }
 
+  static view404() {
+    const app: HTMLElement = document.getElementById("app")!;
+    app.innerHTML = "404 Page not found.";
+  }
+
   static splitProxyPath(path: string): Routes.SplitedProxyPath {
     const proxyPathRegex: RegExp = new RegExp("(\\/proxy\\/\\d+)+");
     const proxyPath = path.match(proxyPathRegex);
@@ -56,8 +57,14 @@ export class ROUTES {
     };
   }
 
-  static view404() {
-    const app: HTMLElement = document.getElementById("app")!;
-    app.innerHTML = "404 Page not found.";
+  static setInitialRootPath() {
+    const { proxy }: { proxy: string } = this.splitProxyPath(
+      window.location.pathname
+    );
+
+    // When server is running on proxy.
+    if (proxy) {
+      this.ROOT_PATH = `${proxy}/`;
+    }
   }
 }
