@@ -1,4 +1,3 @@
-import { Nullable } from "global-types";
 import { Routes } from "Router-Type";
 
 const parseHashPath = (toParse: string): string => {
@@ -29,7 +28,7 @@ export class ROUTES {
   static setViewTo(
     path: string,
     newView: () => void,
-    resetContent: HTMLElement | Nullable = document.getElementById("app")
+    resetContent: HTMLElement
   ) {
     const viewWrapper = (): void => {
       if (resetContent) resetContent.innerHTML = "";

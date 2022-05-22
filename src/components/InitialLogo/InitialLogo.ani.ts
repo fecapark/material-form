@@ -4,7 +4,7 @@ import SequenceAnimator from "../../lib/Animator/SequenceAnimator";
 function getFadeOutAniamtion(
   target: HTMLElement
 ): Array<UserAnimationLineData> {
-  const fadeOutSequence: Array<UserAnimationLineData> = [
+  return [
     {
       target,
       animation: ({ target }) => {
@@ -16,8 +16,6 @@ function getFadeOutAniamtion(
       bezier: [0.4, 0, 0.2, 1],
     },
   ];
-
-  return fadeOutSequence;
 }
 
 function getMaskAnimation(
@@ -30,7 +28,7 @@ function getMaskAnimation(
   const deafultDelay = 0.6;
   const delayGap = 0.18;
 
-  const maskSequence: Array<UserAnimationLineData> = [
+  return [
     [
       {
         target: masks[0],
@@ -70,23 +68,19 @@ function getMaskAnimation(
       },
     ],
   ];
-
-  return maskSequence;
 }
 
 export function executeAnimation(
   rootTarget: HTMLElement,
   whenEnd: () => void = () => {}
 ) {
-  const seq1 = new SequenceAnimator(
-    getFadeOutAniamtion(rootTarget.querySelector("#logo-text-container")!),
-    () => seq2.start()
-  );
-
-  const seq2 = new SequenceAnimator(
-    getMaskAnimation(rootTarget.querySelectorAll(".mask")),
+  const animation = new SequenceAnimator(
+    [
+      ...getFadeOutAniamtion(rootTarget.querySelector("#logo-text-container")!),
+      ...getMaskAnimation(rootTarget.querySelectorAll(".mask")),
+    ],
     () => whenEnd()
   );
 
-  seq1.start();
+  animation.start();
 }

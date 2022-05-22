@@ -1,0 +1,22 @@
+.info-card.head {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: $primary-color;
+  padding: 0 20px;
+
+  .title-text {
+    letter-spacing: 0.5px;
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
+    opacity: 0;
+    margin-bottom: 5px;
+  }
+
+  .sub-title-text {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.95);
+    opacity: 0;
+  }
+}

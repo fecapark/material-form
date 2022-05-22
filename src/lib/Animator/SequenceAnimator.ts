@@ -56,6 +56,12 @@ export default class SequenceAnimator {
   }
 
   checkToNextLine() {
+    const unsetAnimationForLine = (aAnimationLine: AnimationLine) => {
+      aAnimationLine.forEach((aAnimator: Animator) =>
+        aAnimator.unsetAnimation()
+      );
+    };
+
     const isLineEnd = this.animationLines[this.currentAnimationIndex].every(
       (aAnimator: Animator) => {
         return aAnimator.isEnd;
@@ -63,6 +69,8 @@ export default class SequenceAnimator {
     );
 
     if (!isLineEnd) return;
+
+    unsetAnimationForLine(this.animationLines[this.currentAnimationIndex]);
 
     // When all animations end.
     if (++this.currentAnimationIndex >= this.animationLines.length) {
@@ -74,11 +82,6 @@ export default class SequenceAnimator {
     }
 
     if (!this.isPaused) {
-      this.animationLines[this.currentAnimationIndex].forEach(
-        (aAnimator: Animator) => {
-          aAnimator.unsetAnimation();
-        }
-      );
       this.startLine();
     }
   }

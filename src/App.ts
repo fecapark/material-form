@@ -2,10 +2,12 @@ import "./App.scss";
 import { ROUTES } from "./core/Router/routes";
 import InitialLogo from "./components/InitialLogo/InitialLogo";
 import Component from "./core/Component/Component";
+import MainContainer from "./components/MainContainer/MainContainer";
 
 export default class App extends Component {
   appRendered: boolean = false;
   initialLogo!: InitialLogo;
+  mainContainer!: MainContainer;
 
   constructor() {
     super({ id: "app" });
@@ -25,9 +27,9 @@ export default class App extends Component {
   }
 
   setViews() {
-    ROUTES.setViewTo("#", this.renderHome.bind(this));
-    ROUTES.setViewTo("#logo", this.renderLogo.bind(this));
-    ROUTES.setViewTo("#signin", this.renderSignIn.bind(this));
+    ROUTES.setViewTo("#", this.renderHome.bind(this), this.container);
+    ROUTES.setViewTo("#logo", this.renderLogo.bind(this), this.container);
+    ROUTES.setViewTo("#signin", this.renderSignIn.bind(this), this.container);
   }
 
   renderHome() {
@@ -43,7 +45,8 @@ export default class App extends Component {
   }
 
   renderSignIn() {
-    this.container.innerHTML = "to signin!";
+    this.mainContainer = new MainContainer();
+    this.container.appendChild(this.mainContainer.container);
   }
 
   render() {
