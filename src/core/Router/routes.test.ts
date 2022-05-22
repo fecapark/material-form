@@ -8,9 +8,13 @@ describe("Test routes module.", () => {
   it("Set another view to route.", () => {
     const testPath: string = "#";
 
-    ROUTES.setViewTo(testPath, () => {
-      throw Error("test1");
-    });
+    ROUTES.setViewTo(
+      testPath,
+      () => {
+        throw Error("test1");
+      },
+      document.createElement("div")
+    );
 
     expect(() => {
       ROUTES.view(testPath);
