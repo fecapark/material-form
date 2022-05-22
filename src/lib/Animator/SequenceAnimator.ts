@@ -9,7 +9,10 @@ export default class SequenceAnimator {
   isPaused: boolean = false;
   allEnd: boolean = false;
 
-  constructor(animatorLineDatas: Array<UserAnimationLineData>) {
+  constructor(
+    animatorLineDatas: Array<UserAnimationLineData>,
+    private readonly whenAllEnd: () => void = () => {}
+  ) {
     this.animationLines = this.lineDatasToAnimationLines(animatorLineDatas);
   }
 
@@ -61,14 +64,21 @@ export default class SequenceAnimator {
 
     if (!isLineEnd) return;
 
+    // When all animations end.
     if (++this.currentAnimationIndex >= this.animationLines.length) {
       this.isStarted = false;
       this.isPaused = false;
       this.allEnd = true;
+      this.whenAllEnd();
       return;
     }
 
     if (!this.isPaused) {
+      this.animationLines[this.currentAnimationIndex].forEach(
+        (aAnimator: Animator) => {
+          aAnimator.unsetAnimation();
+        }
+      );
       this.startLine();
     }
   }

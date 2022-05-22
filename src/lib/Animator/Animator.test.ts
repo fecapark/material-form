@@ -31,7 +31,7 @@ describe("Test Animator", () => {
   it("Set empty value to default value.", () => {
     const ani: Animator = sa.animationLines[1][0];
 
-    expect(ani.delay).toBe(0);
+    expect(ani.delay).toBe(0.01);
     expect(ani.bezier).toEqual([0, 0, 1, 1]);
     expect(typeof ani.callWhenEnd).toBe("function");
     expect(ani.pauseWhenEnd).toBe(false);
