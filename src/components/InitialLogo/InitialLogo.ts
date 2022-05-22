@@ -1,8 +1,9 @@
 import "./InitialLogo.scss";
 import Component from "../../core/Component/Component";
 import { executeAnimation } from "./InitialLogo.ani";
+
 export default class InitialLogo extends Component {
-  constructor() {
+  constructor(private whenLogoAnimationEnd: () => void = () => {}) {
     super({ id: "initial-logo-container" });
     this.render();
   }
@@ -21,6 +22,6 @@ export default class InitialLogo extends Component {
       <div class="mask left"></div>
     `;
 
-    executeAnimation(this.container);
+    executeAnimation(this.container, this.whenLogoAnimationEnd);
   }
 }

@@ -22,77 +22,71 @@ function getFadeOutAniamtion(
 
 function getMaskAnimation(
   masks: NodeListOf<HTMLElement>
-): Array<Array<UserAnimationLineData>> {
+): Array<UserAnimationLineData> {
   const resultSize = { width: 300, height: 135 };
+
+  const duration = 0.35;
+  const bezier: [number, number, number, number] = [0, 0, 0.2, 1];
   const deafultDelay = 0.6;
   const delayGap = 0.18;
 
-  const topMaskSequence: Array<UserAnimationLineData> = [
-    {
-      target: masks[0],
-      animation: ({ target }) => {
-        target.style.transform = `translateY(calc(-50% - ${resultSize.height}px / 2))`;
+  const maskSequence: Array<UserAnimationLineData> = [
+    [
+      {
+        target: masks[0],
+        animation: ({ target }) => {
+          target.style.transform = `translateY(calc(-50% - ${resultSize.height}px / 2))`;
+        },
+        duration,
+        delay: deafultDelay,
+        bezier,
       },
-      duration: 0.35,
-      delay: deafultDelay,
-      bezier: [0, 0, 0.2, 1],
-    },
+      {
+        target: masks[1],
+        animation: ({ target }) => {
+          target.style.transform = `translateX(calc(50% + ${resultSize.width}px / 2))`;
+        },
+        duration,
+        delay: deafultDelay + delayGap,
+        bezier,
+      },
+      {
+        target: masks[2],
+        animation: ({ target }) => {
+          target.style.transform = `translateY(calc(50% + ${resultSize.height}px / 2))`;
+        },
+        duration,
+        delay: deafultDelay + delayGap * 2,
+        bezier,
+      },
+      {
+        target: masks[3],
+        animation: ({ target }) => {
+          target.style.transform = `translateX(calc(-50% - ${resultSize.width}px / 2))`;
+        },
+        duration,
+        delay: deafultDelay + delayGap * 3,
+        bezier,
+      },
+    ],
   ];
 
-  const rightMaskSequence: Array<UserAnimationLineData> = [
-    {
-      target: masks[1],
-      animation: ({ target }) => {
-        target.style.transform = `translateX(calc(50% + ${resultSize.width}px / 2))`;
-      },
-      duration: 0.35,
-      delay: deafultDelay + delayGap,
-      bezier: [0, 0, 0.2, 1],
-    },
-  ];
-
-  const bottomMaskSequence: Array<UserAnimationLineData> = [
-    {
-      target: masks[2],
-      animation: ({ target }) => {
-        target.style.transform = `translateY(calc(50% + ${resultSize.height}px / 2))`;
-      },
-      duration: 0.35,
-      delay: deafultDelay + delayGap * 2,
-      bezier: [0, 0, 0.2, 1],
-    },
-  ];
-
-  const leftMaskSequence: Array<UserAnimationLineData> = [
-    {
-      target: masks[3],
-      animation: ({ target }) => {
-        target.style.transform = `translateX(calc(-50% - ${resultSize.width}px / 2))`;
-      },
-      duration: 0.35,
-      delay: deafultDelay + delayGap * 3,
-      bezier: [0, 0, 0.2, 1],
-    },
-  ];
-
-  return [
-    topMaskSequence,
-    rightMaskSequence,
-    bottomMaskSequence,
-    leftMaskSequence,
-  ];
+  return maskSequence;
 }
 
-export function executeAnimation(rootTarget: HTMLElement) {
+export function executeAnimation(
+  rootTarget: HTMLElement,
+  whenEnd: () => void = () => {}
+) {
   const seq1 = new SequenceAnimator(
     getFadeOutAniamtion(rootTarget.querySelector("#logo-text-container")!),
-    () => {
-      maskSequences.forEach((aMaskSequence) => aMaskSequence.start());
-    }
+    () => seq2.start()
   );
-  const maskSequences = getMaskAnimation(
-    rootTarget.querySelectorAll(".mask")
-  ).map((aMaskSequence) => new SequenceAnimator(aMaskSequence));
+
+  const seq2 = new SequenceAnimator(
+    getMaskAnimation(rootTarget.querySelectorAll(".mask")),
+    () => whenEnd()
+  );
 
   seq1.start();
 }
