@@ -14,13 +14,20 @@ const SCSS_OPTIONS = (): object => {
   };
 };
 
-export default defineConfig(({ command }) => {
+export default defineConfig(({ command, mode }) => {
   if (command === "serve") {
     return {
       base: `/proxy/${process.env.VITE_CODE_SERVER_DEV_PORT}/`,
       server: {
         port: parseInt(process.env.VITE_CODE_SERVER_DEV_PORT),
       },
+      css: SCSS_OPTIONS(),
+    };
+  }
+
+  if (mode === "preview-build") {
+    return {
+      base: `/proxy/3000/proxy/${process.env.VITE_CODE_SERVER_DEV_PORT}/`,
       css: SCSS_OPTIONS(),
     };
   }
