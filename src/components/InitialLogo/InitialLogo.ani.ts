@@ -42,7 +42,7 @@ function getMaskAnimation(
       {
         target: masks[1],
         animation: ({ target }) => {
-          target.style.transform = `translateX(calc(50% + ${resultSize.width}px / 2))`;
+          target.style.transform = `translate(calc(50% + ${resultSize.width}px / 2))`;
         },
         duration,
         delay: deafultDelay + delayGap,
@@ -60,7 +60,7 @@ function getMaskAnimation(
       {
         target: masks[3],
         animation: ({ target }) => {
-          target.style.transform = `translateX(calc(-50% - ${resultSize.width}px / 2))`;
+          target.style.transform = `translate(calc(-50% - ${resultSize.width}px / 2))`;
         },
         duration,
         delay: deafultDelay + delayGap * 3,

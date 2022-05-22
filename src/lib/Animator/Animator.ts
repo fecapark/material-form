@@ -73,7 +73,6 @@ export default class Animator {
       if (this.pauseWhenEnd) this.sequenceAnimator.pause();
 
       this.target.removeEventListener("transitionend", this.callWhenEnd);
-      // this.unsetAnimation();
 
       this.isEnd = true;
       this.sequenceAnimator.checkToNextLine();
