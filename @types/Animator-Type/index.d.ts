@@ -1,11 +1,27 @@
 declare module "Animator-Type" {
-  export interface UserAnimationData {
+  export type AnimationFunction = ({ target }: { target: HTMLElement }) => void;
+  export type BezierValues = [number, number, number, number];
+  export type OnEndFunction = () => void;
+
+  interface EssentialAnimationData {
     target: HTMLElement;
-    animation: ({ target }: { target: HTMLElement }) => void;
+    animation: AnimationFunction;
     duration: number;
-    delay?: number;
-    bezier?: [number, number, number, number];
-    callWhenEnd?: () => void;
-    pauseWhenEnd?: boolean;
+  }
+
+  export namespace AnimationData {
+    interface Custom extends EssentialAnimationData {
+      delay?: number;
+      bezier?: BezierValues;
+      onEnd?: OnEndFunction;
+      pauseOnEnd?: boolean;
+    }
+
+    interface Parsed extends EssentialAnimationData {
+      delay: number;
+      bezier: BezierValues;
+      onEnd: OnEndFunction;
+      pauseOnEnd: boolean;
+    }
   }
 }

@@ -1,9 +1,8 @@
 declare module "SequenceAnimator-Type" {
-  type Animator = import("../../src/lib/Animator/Animator").Animator;
-  type UserAnimationData = import("Animator-Type").UserAnimationData;
+  type CustomAnimationData = import("Animator-Type").AnimationData.Custom;
 
-  export type AnimationLine = Array<Animator>;
-  export type UserAnimationLineData =
-    | Array<UserAnimationData>
-    | UserAnimationData;
+  export namespace AnimationSequence {
+    type Custom = Array<CustomAnimationData> | CustomAnimationData;
+    type Parsed = Array<CustomAnimationData>;
+  }
 }

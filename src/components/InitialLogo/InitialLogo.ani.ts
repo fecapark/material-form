@@ -1,9 +1,10 @@
-import { UserAnimationLineData } from "SequenceAnimator-Type";
+import { AnimationSequence } from "SequenceAnimator-Type";
+import { moveEventStack } from "../../lib/Animator/Animator";
 import SequenceAnimator from "../../lib/Animator/SequenceAnimator";
 
 function getFadeOutAniamtion(
   target: HTMLElement
-): Array<UserAnimationLineData> {
+): Array<AnimationSequence.Custom> {
   return [
     {
       target,
@@ -20,7 +21,7 @@ function getFadeOutAniamtion(
 
 function getMaskAnimation(
   masks: NodeListOf<HTMLElement>
-): Array<UserAnimationLineData> {
+): Array<AnimationSequence.Custom> {
   const resultSize = { width: 300, height: 135 };
 
   const duration = 0.35;
@@ -35,7 +36,7 @@ function getMaskAnimation(
         animation: ({ target }) => {
           target.style.transform = `translateY(calc(-50% - ${resultSize.height}px / 2))`;
         },
-        duration,
+        duration: duration,
         delay: deafultDelay,
         bezier,
       },
@@ -74,13 +75,16 @@ export function executeAnimation(
   rootTarget: HTMLElement,
   whenEnd: () => void = () => {}
 ) {
-  const animation = new SequenceAnimator(
-    [
-      ...getFadeOutAniamtion(rootTarget.querySelector("#logo-text-container")!),
-      ...getMaskAnimation(rootTarget.querySelectorAll(".mask")),
-    ],
-    () => whenEnd()
-  );
-
-  animation.start();
+  moveEventStack(() => {
+    const animation = new SequenceAnimator(
+      [
+        ...getFadeOutAniamtion(
+          rootTarget.querySelector("#logo-text-container")!
+        ),
+        ...getMaskAnimation(rootTarget.querySelectorAll(".mask")),
+      ],
+      () => whenEnd()
+    );
+    animation.start();
+  });
 }

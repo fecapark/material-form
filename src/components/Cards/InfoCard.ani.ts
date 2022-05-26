@@ -1,10 +1,10 @@
-import { UserAnimationLineData } from "SequenceAnimator-Type";
+import { AnimationSequence } from "SequenceAnimator-Type";
 import { setShadow } from "../../lib/shadow/shadow";
 import SequenceAnimator from "../../lib/Animator/SequenceAnimator";
 
 function getHeadCardInitShadowAnimation(
   headCard: HTMLElement
-): Array<UserAnimationLineData> {
+): Array<AnimationSequence.Custom> {
   return [
     {
       target: headCard,
@@ -20,7 +20,7 @@ function getHeadCardInitShadowAnimation(
 
 function getHeadCardTextFadeInAnimation(
   headCard: HTMLElement
-): Array<UserAnimationLineData> {
+): Array<AnimationSequence.Custom> {
   return [
     {
       target: headCard.querySelector(".title-text")!,
@@ -45,7 +45,7 @@ function getHoverSplitAnimation(
   headCard: HTMLElement,
   nameCard: HTMLElement,
   tagCard: HTMLElement
-): Array<UserAnimationLineData> {
+): Array<AnimationSequence.Custom> {
   const hoverMargin: number = 20;
 
   return [
@@ -93,7 +93,7 @@ function getHoverSplitAnimation(
 function getHoverDownAnimation(
   headCard: HTMLElement,
   nameCard: HTMLElement
-): Array<UserAnimationLineData> {
+): Array<AnimationSequence.Custom> {
   return [
     [
       {
@@ -131,14 +131,14 @@ function switchToFlexStyles(
 
     // All card position to 'static' (default)
     headCard.style.position = "static";
-    headCard.style.transform = "translateY(0)";
+    headCard.style.transform = "translate3d(0, 0, 0)";
 
     nameCard.style.position = "static";
-    nameCard.style.transform = "translateY(0)";
+    nameCard.style.transform = "translate3d(0, 0, 0)";
     nameCard.style.margin = "20px 0";
 
     tagCard.style.position = "static";
-    tagCard.style.transform = "translateY(0)";
+    tagCard.style.transform = "translate3d(0, 0, 0)";
   };
 }
 
@@ -151,7 +151,7 @@ export function executeAnimation(
 ) {
   const animation = new SequenceAnimator(
     [
-      ...getHeadCardInitShadowAnimation(headCard),
+      // ...getHeadCardInitShadowAnimation(headCard),
       ...getHeadCardTextFadeInAnimation(headCard),
       ...getHoverSplitAnimation(headCard, nameCard, tagCard),
       ...getHoverDownAnimation(headCard, nameCard),
