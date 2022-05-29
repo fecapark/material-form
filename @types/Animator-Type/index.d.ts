@@ -1,27 +1,37 @@
-declare module "Animator-Type" {
-  export type AnimationFunction = ({ target }: { target: HTMLElement }) => void;
-  export type BezierValues = [number, number, number, number];
-  export type OnEndFunction = () => void;
+import { Nullable } from "global-types";
 
-  interface EssentialAnimationData {
+export type AnimatorClosure = (() => boolean) | Nullable;
+
+export declare module AnimationData {
+  type BezierValue = [number, number, number, number];
+  type OnEndFunction = () => void;
+
+  interface StyleData {
+    propertyName: string;
+    formatValue: string;
+    from: Array<string>;
+    to: Array<string>;
+  }
+
+  interface EssentialData {
     target: HTMLElement;
-    animation: AnimationFunction;
+    styles: Array<StyleData>;
     duration: number;
   }
 
-  export namespace AnimationData {
-    interface Custom extends EssentialAnimationData {
-      delay?: number;
-      bezier?: BezierValues;
-      onEnd?: OnEndFunction;
-      pauseOnEnd?: boolean;
-    }
+  /* @export */
+  interface Custom extends EssentialData {
+    delay?: number;
+    bezier?: string | BezierValue;
+    onEnd?: OnEndFunction;
+    pauseOnEnd?: boolean;
+  }
 
-    interface Parsed extends EssentialAnimationData {
-      delay: number;
-      bezier: BezierValues;
-      onEnd: OnEndFunction;
-      pauseOnEnd: boolean;
-    }
+  /* @export */
+  interface Parsed extends EssentialData {
+    delay: number;
+    bezier: BezierValue;
+    onEnd: OnEndFunction;
+    pauseOnEnd: boolean;
   }
 }

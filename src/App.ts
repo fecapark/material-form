@@ -3,6 +3,8 @@ import { ROUTES } from "./core/Router/routes";
 import InitialLogo from "./components/InitialLogo/InitialLogo";
 import Component from "./core/Component/Component";
 import MainContainer from "./components/MainContainer/MainContainer";
+import Animator from "./lib/Animator/Animator";
+import LegacyAnimator from "./lib/Animator/legacy/Animator";
 
 export default class App extends Component {
   appRendered: boolean = false;

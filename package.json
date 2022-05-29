@@ -24,6 +24,7 @@
   },
   "homepage": "https://fecapark.github.io/material-todo-list/",
   "dependencies": {
+    "bezier-easing": "^2.1.0",
     "dotenv": "^16.0.1"
   }
 }

@@ -4,7 +4,7 @@ export function moveEventStack(eventCall: () => void, time: number = 0) {
   requestAnimationFrame(() => setTimeout(() => eventCall(), time));
 }
 
-export default class Animator {
+export default class LegacyAnimator {
   private data: AnimationData.Parsed;
   private resolveWrapper: ((e: Event) => void) | undefined = undefined;
 
