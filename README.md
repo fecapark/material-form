@@ -80,3 +80,10 @@ class RouterComponent extends Component {
   }
 }
 ```
+
+## Todo
+
+1. Animator가 `setShadow`를 호환하도록 변경
+2. from을 빈 배열(`[]`)로 냅두면 현재 스타일을 사용하도록
+3. %x 개수랑 data 개수랑 다르면 error 처리
+4. Component render 단위에서 애니메이션 처리가 가능한 프레임워크 제작

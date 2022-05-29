@@ -1,17 +1,9 @@
-import { Nullable } from "global-types";
+declare module "Animator-Type" {
+  type Nullable = import("global-types").Nullable;
 
-export type AnimatorClosure = (() => boolean) | Nullable;
-
-export declare module AnimationData {
-  type BezierValue = [number, number, number, number];
-  type OnEndFunction = () => void;
-
-  interface StyleData {
-    propertyName: string;
-    formatValue: string;
-    from: Array<string>;
-    to: Array<string>;
-  }
+  export type BezierValue = [number, number, number, number];
+  export type OnEndFunction = ({ target }: { target: HTMLElement }) => void;
+  export type AnimatorClosure = (() => boolean) | Nullable;
 
   interface EssentialData {
     target: HTMLElement;
@@ -19,19 +11,26 @@ export declare module AnimationData {
     duration: number;
   }
 
-  /* @export */
-  interface Custom extends EssentialData {
-    delay?: number;
-    bezier?: string | BezierValue;
-    onEnd?: OnEndFunction;
-    pauseOnEnd?: boolean;
-  }
+  export namespace AnimationData {
+    interface StyleData {
+      propertyName: string;
+      formatValue: string;
+      from: Array<number>;
+      to: Array<number>;
+    }
 
-  /* @export */
-  interface Parsed extends EssentialData {
-    delay: number;
-    bezier: BezierValue;
-    onEnd: OnEndFunction;
-    pauseOnEnd: boolean;
+    interface Custom extends EssentialData {
+      delay?: number;
+      bezier?: string | BezierValue;
+      onEnd?: OnEndFunction;
+      pauseOnEnd?: boolean;
+    }
+
+    interface Parsed extends EssentialData {
+      delay: number;
+      bezier: BezierValue;
+      onEnd: OnEndFunction;
+      pauseOnEnd: boolean;
+    }
   }
 }

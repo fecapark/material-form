@@ -22,6 +22,8 @@ export default class InitialLogo extends Component {
       <div class="mask left"></div>
     `;
 
-    executeAnimation(this.container, this.whenLogoAnimationEnd);
+    requestAnimationFrame(() => {
+      executeAnimation(this.container, this.whenLogoAnimationEnd);
+    });
   }
 }

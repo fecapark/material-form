@@ -47,19 +47,19 @@
     height: 100%;
 
     &.top {
-      transform: translateY(-100%);
+      transform: translate3d(0, -100%, 0);
     }
 
     &.right {
-      transform: translate(100%);
+      transform: translate3d(100%, 0, 0);
     }
 
     &.bottom {
-      transform: translateY(100%);
+      transform: translate3d(0, 100%, 0);
     }
 
     &.left {
-      transform: translate(-100%);
+      transform: translate3d(-100%, 0, 0);
     }
   }
 }

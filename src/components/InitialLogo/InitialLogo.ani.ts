@@ -1,5 +1,5 @@
+import { BezierValue } from "Animator-Type";
 import { AnimationSequence } from "SequenceAnimator-Type";
-import { moveEventStack } from "../../lib/Animator/Animator";
 import SequenceAnimator from "../../lib/Animator/SequenceAnimator";
 
 function getFadeOutAniamtion(
@@ -8,13 +8,20 @@ function getFadeOutAniamtion(
   return [
     {
       target,
-      animation: ({ target }) => {
-        target.style.opacity = "0";
-        target.style.visibility = "hidden";
-      },
+      styles: [
+        {
+          propertyName: "opacity",
+          formatValue: "%x",
+          from: [1],
+          to: [0],
+        },
+      ],
       duration: 0.4,
       delay: 3,
       bezier: [0.4, 0, 0.2, 1],
+      onEnd: () => {
+        target.style.visibility = "hidden";
+      },
     },
   ];
 }
@@ -22,47 +29,73 @@ function getFadeOutAniamtion(
 function getMaskAnimation(
   masks: NodeListOf<HTMLElement>
 ): Array<AnimationSequence.Custom> {
+  function getBRectFromMask(idx: number): DOMRect {
+    return masks[idx].getBoundingClientRect();
+  }
+
+  // Sizes
   const resultSize = { width: 300, height: 135 };
 
+  // Animation parameters
   const duration = 0.35;
-  const bezier: [number, number, number, number] = [0, 0, 0.2, 1];
   const deafultDelay = 0.6;
   const delayGap = 0.18;
+  const bezier: BezierValue = [0, 0, 0.2, 1];
 
   return [
     [
       {
         target: masks[0],
-        animation: ({ target }) => {
-          target.style.transform = `translateY(calc(-50% - ${resultSize.height}px / 2))`;
-        },
+        styles: [
+          {
+            propertyName: "transform",
+            formatValue: "translate3d(0, %xpx, 0)",
+            from: [-getBRectFromMask(0).height],
+            to: [-getBRectFromMask(0).height / 2 - resultSize.height / 2],
+          },
+        ],
         duration: duration,
         delay: deafultDelay,
         bezier,
       },
       {
         target: masks[1],
-        animation: ({ target }) => {
-          target.style.transform = `translate(calc(50% + ${resultSize.width}px / 2))`;
-        },
+        styles: [
+          {
+            propertyName: "transform",
+            formatValue: "translate3d(%xpx, 0, 0)",
+            from: [getBRectFromMask(0).width],
+            to: [getBRectFromMask(0).width / 2 + resultSize.width / 2],
+          },
+        ],
         duration,
         delay: deafultDelay + delayGap,
         bezier,
       },
       {
         target: masks[2],
-        animation: ({ target }) => {
-          target.style.transform = `translateY(calc(50% + ${resultSize.height}px / 2))`;
-        },
+        styles: [
+          {
+            propertyName: "transform",
+            formatValue: "translate3d(0, %xpx, 0)",
+            from: [getBRectFromMask(0).height],
+            to: [getBRectFromMask(0).height / 2 + resultSize.height / 2],
+          },
+        ],
         duration,
         delay: deafultDelay + delayGap * 2,
         bezier,
       },
       {
         target: masks[3],
-        animation: ({ target }) => {
-          target.style.transform = `translate(calc(-50% - ${resultSize.width}px / 2))`;
-        },
+        styles: [
+          {
+            propertyName: "transform",
+            formatValue: "translate3d(%xpx, 0, 0)",
+            from: [-getBRectFromMask(0).width],
+            to: [-getBRectFromMask(0).width / 2 - resultSize.width / 2],
+          },
+        ],
         duration,
         delay: deafultDelay + delayGap * 3,
         bezier,
@@ -75,16 +108,11 @@ export function executeAnimation(
   rootTarget: HTMLElement,
   whenEnd: () => void = () => {}
 ) {
-  moveEventStack(() => {
-    const animation = new SequenceAnimator(
-      [
-        ...getFadeOutAniamtion(
-          rootTarget.querySelector("#logo-text-container")!
-        ),
-        ...getMaskAnimation(rootTarget.querySelectorAll(".mask")),
-      ],
-      () => whenEnd()
-    );
-    animation.start();
-  });
+  new SequenceAnimator(
+    [
+      ...getFadeOutAniamtion(rootTarget.querySelector("#logo-text-container")!),
+      ...getMaskAnimation(rootTarget.querySelectorAll(".mask")),
+    ],
+    () => whenEnd()
+  ).play();
 }

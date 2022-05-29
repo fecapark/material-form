@@ -26,11 +26,13 @@ export default class MainContainer extends Component {
     cardContainer.appendChild(nameInfoCard.container);
     cardContainer.appendChild(headCard.container);
 
-    executeAnimation(
-      cardContainer,
-      headCard.container,
-      nameInfoCard.container,
-      tagInfoCard.container
-    );
+    requestAnimationFrame(() => {
+      executeAnimation(
+        cardContainer,
+        headCard.container,
+        nameInfoCard.container,
+        tagInfoCard.container
+      );
+    });
   }
 }

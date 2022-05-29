@@ -1,7 +1,12 @@
 import BezierEasing from "bezier-easing";
-import { AnimationData, AnimatorClosure } from "../../../@types/Animator-Type";
+import {
+  AnimationData,
+  AnimatorClosure,
+  BezierValue,
+  OnEndFunction,
+} from "Animator-Type";
 
-const BEZIER_EASING_MAP: Record<string, AnimationData.BezierValue> = {
+const BEZIER_EASING_MAP: Record<string, BezierValue> = {
   linear: [0, 0, 1, 1],
   ease: [0.25, 0.1, 0.25, 1],
   "material-normal": [0.4, 0, 0.2, 1],
@@ -12,7 +17,10 @@ export default class Animator {
   private data: AnimationData.Parsed;
   private animator: AnimatorClosure = null;
 
-  constructor(customData: AnimationData.Custom) {
+  constructor(
+    customData: AnimationData.Custom,
+    private readonly moreOnEnd: () => void = () => {}
+  ) {
     this.data = this.parseData(customData);
   }
 
@@ -27,9 +35,9 @@ export default class Animator {
       const { from, to }: { from: Array<string>; to: Array<string> } =
         aStyleData;
 
-      if (!this.isAnimateValueAsPixel(from, to)) {
-        throw TypeError("Animation value's unit must be pixel.");
-      }
+      // if (!this.isAnimateValueAsPixel(from, to)) {
+      //   throw TypeError("Animation value's unit must be pixel.");
+      // }
 
       if (from.length !== to.length) {
         throw RangeError(
@@ -57,15 +65,15 @@ export default class Animator {
   }
 
   getCurrentValuesAsRatio(
-    from: Array<string>,
-    to: Array<string>,
+    from: Array<number>,
+    to: Array<number>,
     ratio: number
   ): Array<number> {
     const result: Array<number> = [];
 
     for (let i = 0; i < from.length; i++) {
-      const aFrom = parseInt(from[i].replace("px", ""));
-      const aTo = parseInt(to[i].replace("px", ""));
+      const aFrom = from[i];
+      const aTo = to[i];
 
       result.push(aFrom + (aTo - aFrom) * ratio);
     }
@@ -125,6 +133,9 @@ export default class Animator {
     if (isAnimationEnd) {
       cancelAnimationFrame(reqId);
       this.animator = null;
+
+      this.data.onEnd({ target: this.data.target });
+      this.moreOnEnd();
     }
   }
 
@@ -132,7 +143,7 @@ export default class Animator {
     const splited: Array<string> = fstring.split("%x");
 
     values.forEach((aValue, index) => {
-      splited.splice(index * 2 + 1, 0, `${aValue}px`);
+      splited.splice(index * 2 + 1, 0, aValue.toString());
     });
 
     return splited.join("");
