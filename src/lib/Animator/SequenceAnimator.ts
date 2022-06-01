@@ -1,4 +1,4 @@
-import { AnimationSequence } from "SequenceAnimator-Type";
+import { AnimationSequence } from "Animator-Type";
 import Animator from "./Animator";
 
 export default class SequenceAnimator {

@@ -1,10 +1,5 @@
 import BezierEasing from "bezier-easing";
-import {
-  AnimationData,
-  AnimatorClosure,
-  BezierValue,
-  OnEndFunction,
-} from "Animator-Type";
+import { AnimationData, AnimatorClosure, BezierValue } from "Animator-Type";
 
 const BEZIER_EASING_MAP: Record<string, BezierValue> = {
   linear: [0, 0, 1, 1],
@@ -24,27 +19,26 @@ export default class Animator {
     this.data = this.parseData(customData);
   }
 
-  parseData(customData: AnimationData.Custom): AnimationData.Parsed {
+  private parseData(customData: AnimationData.Custom): AnimationData.Parsed {
+    function checkDataFormat() {
+      customData.styles.forEach((aStyleData) => {
+        const { from, to }: { from: Array<number>; to: Array<number> } =
+          aStyleData;
+
+        if (from.length !== to.length) {
+          throw RangeError(
+            "Animation from and to value must be matched one-to-one."
+          );
+        }
+      });
+    }
+
+    checkDataFormat();
+
     const bezierValue =
       typeof customData.bezier === "string"
         ? BEZIER_EASING_MAP[customData.bezier]
         : customData.bezier ?? BEZIER_EASING_MAP["linear"];
-
-    // Check formats
-    customData.styles.forEach((aStyleData) => {
-      const { from, to }: { from: Array<string>; to: Array<string> } =
-        aStyleData;
-
-      // if (!this.isAnimateValueAsPixel(from, to)) {
-      //   throw TypeError("Animation value's unit must be pixel.");
-      // }
-
-      if (from.length !== to.length) {
-        throw RangeError(
-          "Animation from and to value must be matched one-to-one."
-        );
-      }
-    });
 
     return {
       target: customData.target,
@@ -57,14 +51,7 @@ export default class Animator {
     };
   }
 
-  isAnimateValueAsPixel(from: Array<string>, to: Array<string>): boolean {
-    return (
-      from.every((aFrom) => aFrom.endsWith("px")) &&
-      to.every((aTo) => aTo.endsWith("px"))
-    );
-  }
-
-  getCurrentValuesAsRatio(
+  private getCurrentValuesAsRatio(
     from: Array<number>,
     to: Array<number>,
     ratio: number
@@ -81,23 +68,22 @@ export default class Animator {
     return result;
   }
 
-  animate(ratio: number) {
+  private animate(ratio: number) {
     const animateStyles: Array<AnimationData.StyleData> = this.data.styles;
 
     animateStyles.forEach((aAnimateStyle) => {
-      const { propertyName, formatValue, from, to }: AnimationData.StyleData =
-        aAnimateStyle;
+      const { prop, fvalue, from, to }: AnimationData.StyleData = aAnimateStyle;
 
       const animatedValue: string = this.parseFormatedStyleString(
-        formatValue,
+        fvalue,
         this.getCurrentValuesAsRatio(from, to, ratio)
       );
 
-      this.data.target.style.setProperty(propertyName, animatedValue);
+      this.data.target.style.setProperty(prop, animatedValue);
     });
   }
 
-  getAnimator(): AnimatorClosure {
+  private getAnimator(): AnimatorClosure {
     let startTime: Date | null = null;
     const bezier = BezierEasing(...this.data.bezier);
 
@@ -114,32 +100,10 @@ export default class Animator {
     return animator;
   }
 
-  play() {
-    if (!this.animator) {
-      this.animator = this.getAnimator();
-    }
-
-    setTimeout(() => {
-      requestAnimationFrame(this.runAnimationFrame.bind(this));
-    }, this.data.delay * 1000);
-  }
-
-  runAnimationFrame() {
-    const reqId: number = requestAnimationFrame(
-      this.runAnimationFrame.bind(this)
-    );
-    const isAnimationEnd: boolean = this.animator!();
-
-    if (isAnimationEnd) {
-      cancelAnimationFrame(reqId);
-      this.animator = null;
-
-      this.data.onEnd({ target: this.data.target });
-      this.moreOnEnd();
-    }
-  }
-
-  parseFormatedStyleString(fstring: string, values: Array<number>): string {
+  private parseFormatedStyleString(
+    fstring: string,
+    values: Array<number>
+  ): string {
     const splited: Array<string> = fstring.split("%x");
 
     values.forEach((aValue, index) => {
@@ -147,5 +111,27 @@ export default class Animator {
     });
 
     return splited.join("");
+  }
+
+  public play() {
+    this.animator = this.animator ?? this.getAnimator();
+
+    setTimeout(() => {
+      requestAnimationFrame(this.runAnimationFrame.bind(this));
+    }, this.data.delay * 1000);
+  }
+
+  public runAnimationFrame() {
+    const reqId: number = requestAnimationFrame(
+      this.runAnimationFrame.bind(this)
+    );
+
+    if (!this.animator || this.animator()) {
+      cancelAnimationFrame(reqId);
+      this.animator = null;
+
+      this.data.onEnd({ target: this.data.target });
+      this.moreOnEnd();
+    }
   }
 }
