@@ -9,8 +9,8 @@ export default class HeadInfoCard extends Component {
 
   render() {
     this.container.innerHTML = `
-      <span class="title-text">반가워요.</span>
-      <span class="sub-title-text">사용자님이 누군지 알려주세요!</span>
+      <span class="title-text">반가워요!</span>
+      <span class="sub-title-text">사용자님이 누군지 알려주세요.</span>
     `;
   }
 }

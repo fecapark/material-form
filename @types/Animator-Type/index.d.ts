@@ -7,14 +7,14 @@ declare module "Animator-Type" {
 
   interface EssentialData {
     target: HTMLElement;
-    styles: Array<StyleData>;
+    styles: Array<AnimationData.StyleData>;
     duration: number;
   }
 
   export namespace AnimationData {
     interface StyleData {
-      propertyName: string;
-      formatValue: string;
+      prop: string;
+      fvalue: string;
       from: Array<number>;
       to: Array<number>;
     }
@@ -32,5 +32,10 @@ declare module "Animator-Type" {
       onEnd: OnEndFunction;
       pauseOnEnd: boolean;
     }
+  }
+
+  export namespace AnimationSequence {
+    type Parsed = Array<AnimationData.Custom>;
+    type Custom = Parsed | AnimationData.Custom;
   }
 }

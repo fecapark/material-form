@@ -10,8 +10,8 @@ function getFadeOutAniamtion(
       target,
       styles: [
         {
-          propertyName: "opacity",
-          formatValue: "%x",
+          prop: "opacity",
+          fvalue: "%x",
           from: [1],
           to: [0],
         },
@@ -48,8 +48,8 @@ function getMaskAnimation(
         target: masks[0],
         styles: [
           {
-            propertyName: "transform",
-            formatValue: "translate3d(0, %xpx, 0)",
+            prop: "transform",
+            fvalue: "translate3d(0, %xpx, 0)",
             from: [-getBRectFromMask(0).height],
             to: [-getBRectFromMask(0).height / 2 - resultSize.height / 2],
           },
@@ -62,8 +62,8 @@ function getMaskAnimation(
         target: masks[1],
         styles: [
           {
-            propertyName: "transform",
-            formatValue: "translate3d(%xpx, 0, 0)",
+            prop: "transform",
+            fvalue: "translate3d(%xpx, 0, 0)",
             from: [getBRectFromMask(0).width],
             to: [getBRectFromMask(0).width / 2 + resultSize.width / 2],
           },
@@ -76,8 +76,8 @@ function getMaskAnimation(
         target: masks[2],
         styles: [
           {
-            propertyName: "transform",
-            formatValue: "translate3d(0, %xpx, 0)",
+            prop: "transform",
+            fvalue: "translate3d(0, %xpx, 0)",
             from: [getBRectFromMask(0).height],
             to: [getBRectFromMask(0).height / 2 + resultSize.height / 2],
           },
@@ -90,8 +90,8 @@ function getMaskAnimation(
         target: masks[3],
         styles: [
           {
-            propertyName: "transform",
-            formatValue: "translate3d(%xpx, 0, 0)",
+            prop: "transform",
+            fvalue: "translate3d(%xpx, 0, 0)",
             from: [-getBRectFromMask(0).width],
             to: [-getBRectFromMask(0).width / 2 - resultSize.width / 2],
           },

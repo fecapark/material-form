@@ -1,5 +1,5 @@
 import { AnimationSequence } from "SequenceAnimator-Type";
-import { setShadow } from "../../lib/shadow/shadow";
+// import { setShadow } from "../../lib/shadow/shadow";
 import SequenceAnimator from "../../lib/Animator/SequenceAnimator";
 
 function getHeadCardTextFadeInAnimation(
@@ -10,27 +10,29 @@ function getHeadCardTextFadeInAnimation(
       target: headCard.querySelector(".title-text")!,
       styles: [
         {
-          propertyName: "opacity",
-          formatValue: "%x",
+          prop: "opacity",
+          fvalue: "%x",
           from: [0],
           to: [1],
         },
       ],
       duration: 0.6,
-      bezier: [0.25, 0, 0.2, 1],
+      bezier: "ease",
+      delay: 0.2,
     },
     {
       target: headCard.querySelector(".sub-title-text")!,
       styles: [
         {
-          propertyName: "opacity",
-          formatValue: "%x",
+          prop: "opacity",
+          fvalue: "%x",
           from: [0],
           to: [1],
         },
       ],
       duration: 0.6,
-      bezier: [0.25, 0, 0.2, 1],
+      bezier: "ease",
+      delay: 0.1,
     },
   ];
 }
@@ -48,24 +50,24 @@ function getHoverSplitAnimation(
       // Use setShadow(target, 3)
       styles: [
         {
-          propertyName: "box-shadow",
-          formatValue:
+          prop: "box-shadow",
+          fvalue:
             "0 %xpx %xpx rgba(0, 0, 0, %x), 0 %xpx %xpx rgba(0, 0, 0, %x)",
-          from: [0, 0, 0, 0, 0, 0],
+          from: [0, 0, 0.19, 0, 0, 0.23],
           to: [10, 20, 0.19, 6, 6, 0.23],
         },
       ],
       duration: 0.3,
       delay: 0.2,
-      bezier: [0.4, 0, 0.2, 1],
+      bezier: "material-normal",
     },
     [
       {
         target: headCard,
         styles: [
           {
-            propertyName: "transform",
-            formatValue: "translate3d(0, %xpx, 0)",
+            prop: "transform",
+            fvalue: "translate3d(0, %xpx, 0)",
             from: [-headCard.getBoundingClientRect().height / 2],
             to: [
               -headCard.getBoundingClientRect().height / 2 - 135 - hoverMargin,
@@ -74,38 +76,38 @@ function getHoverSplitAnimation(
         ],
         duration: 0.35,
         delay: 0.2,
-        bezier: [0.4, 0, 0.2, 1],
+        bezier: "material-normal",
       },
       {
         target: nameCard,
         // Use setShadow(target, 2)
         styles: [
           {
-            propertyName: "box-shadow",
-            formatValue:
+            prop: "box-shadow",
+            fvalue:
               "0 %xpx %xpx rgba(0, 0, 0, %x), 0 %xpx %xpx rgba(0, 0, 0, %x)",
-            from: [0, 0, 0, 0, 0, 0],
+            from: [0, 0, 0.16, 0, 0, 0.23],
             to: [3, 6, 0.16, 3, 6, 0.23],
           },
         ],
         duration: 0.3,
         delay: 0.3,
-        bezier: [0.4, 0, 0.2, 1],
+        bezier: "material-normal",
       },
     ],
     {
       target: tagCard,
       styles: [
         {
-          propertyName: "box-shadow",
-          formatValue:
+          prop: "box-shadow",
+          fvalue:
             "0 %xpx %xpx rgba(0, 0, 0, %x), 0 %xpx %xpx rgba(0, 0, 0, %x)",
-          from: [0, 0, 0, 0, 0, 0],
+          from: [0, 0, 0.13, 0, 0, 0.23],
           to: [1, 3, 0.13, 1, 3, 0.23],
         },
         {
-          propertyName: "transform",
-          formatValue: "translate3d(0, %xpx, 0)",
+          prop: "transform",
+          fvalue: "translate3d(0, %xpx, 0)",
           from: [-headCard.getBoundingClientRect().height / 2],
           to: [
             -headCard.getBoundingClientRect().height / 2 + 135 + hoverMargin,
@@ -113,7 +115,7 @@ function getHoverSplitAnimation(
         },
       ],
       duration: 0.35,
-      bezier: [0.4, 0, 0.2, 1],
+      bezier: "material-normal",
     },
   ];
 }
@@ -128,8 +130,8 @@ function getHoverDownAnimation(
         target: headCard,
         styles: [
           {
-            propertyName: "box-shadow",
-            formatValue:
+            prop: "box-shadow",
+            fvalue:
               "0 %xpx %xpx rgba(0, 0, 0, %x), 0 %xpx %xpx rgba(0, 0, 0, %x)",
             from: [10, 20, 0.19, 6, 6, 0.23],
             to: [1, 3, 0.13, 1, 3, 0.23],
@@ -137,21 +139,21 @@ function getHoverDownAnimation(
         ],
         duration: 0.3,
         delay: 0.1,
-        bezier: [0.4, 0, 0.2, 1],
+        bezier: "material-normal",
       },
       {
         target: nameCard,
         styles: [
           {
-            propertyName: "box-shadow",
-            formatValue:
+            prop: "box-shadow",
+            fvalue:
               "0 %xpx %xpx rgba(0, 0, 0, %x), 0 %xpx %xpx rgba(0, 0, 0, %x)",
             from: [3, 6, 0.16, 3, 6, 0.23],
             to: [1, 3, 0.13, 1, 3, 0.23],
           },
         ],
         duration: 0.3,
-        bezier: [0.4, 0, 0.2, 1],
+        bezier: "material-normal",
       },
     ],
   ];
