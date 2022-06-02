@@ -39,7 +39,6 @@ export class ROUTES {
   }
 
   static view(viewPath: string) {
-    console.log(viewPath);
     const path = parseHashPath(viewPath);
 
     if (!this.INFO.hasOwnProperty(path)) {

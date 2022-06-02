@@ -46,7 +46,6 @@ export default class Router {
   }
 
   renderViewWhenPopState() {
-    console.log("popstate");
     ROUTES.view(window.location.hash);
   }
 
