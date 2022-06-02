@@ -1,6 +1,7 @@
-import { AnimationSequence } from "SequenceAnimator-Type";
 // import { setShadow } from "../../lib/shadow/shadow";
+import { AnimationSequence } from "Animator-Type";
 import SequenceAnimator from "../../lib/Animator/SequenceAnimator";
+import { getShadowFormatValue, getShadowValue } from "../../lib/shadow/shadow";
 
 function getHeadCardTextFadeInAnimation(
   headCard: HTMLElement
@@ -47,14 +48,12 @@ function getHoverSplitAnimation(
   return [
     {
       target: headCard,
-      // Use setShadow(target, 3)
       styles: [
         {
           prop: "box-shadow",
-          fvalue:
-            "0 %xpx %xpx rgba(0, 0, 0, %x), 0 %xpx %xpx rgba(0, 0, 0, %x)",
-          from: [0, 0, 0.19, 0, 0, 0.23],
-          to: [10, 20, 0.19, 6, 6, 0.23],
+          fvalue: getShadowFormatValue(),
+          from: getShadowValue(0),
+          to: getShadowValue(3),
         },
       ],
       duration: 0.3,
@@ -80,14 +79,12 @@ function getHoverSplitAnimation(
       },
       {
         target: nameCard,
-        // Use setShadow(target, 2)
         styles: [
           {
             prop: "box-shadow",
-            fvalue:
-              "0 %xpx %xpx rgba(0, 0, 0, %x), 0 %xpx %xpx rgba(0, 0, 0, %x)",
-            from: [0, 0, 0.16, 0, 0, 0.23],
-            to: [3, 6, 0.16, 3, 6, 0.23],
+            fvalue: getShadowFormatValue(),
+            from: getShadowValue(0),
+            to: getShadowValue(2),
           },
         ],
         duration: 0.3,
@@ -100,10 +97,9 @@ function getHoverSplitAnimation(
       styles: [
         {
           prop: "box-shadow",
-          fvalue:
-            "0 %xpx %xpx rgba(0, 0, 0, %x), 0 %xpx %xpx rgba(0, 0, 0, %x)",
-          from: [0, 0, 0.13, 0, 0, 0.23],
-          to: [1, 3, 0.13, 1, 3, 0.23],
+          fvalue: getShadowFormatValue(),
+          from: getShadowValue(0),
+          to: getShadowValue(1),
         },
         {
           prop: "transform",
@@ -131,10 +127,9 @@ function getHoverDownAnimation(
         styles: [
           {
             prop: "box-shadow",
-            fvalue:
-              "0 %xpx %xpx rgba(0, 0, 0, %x), 0 %xpx %xpx rgba(0, 0, 0, %x)",
-            from: [10, 20, 0.19, 6, 6, 0.23],
-            to: [1, 3, 0.13, 1, 3, 0.23],
+            fvalue: getShadowFormatValue(),
+            from: [],
+            to: getShadowValue(1),
           },
         ],
         duration: 0.3,
@@ -146,10 +141,9 @@ function getHoverDownAnimation(
         styles: [
           {
             prop: "box-shadow",
-            fvalue:
-              "0 %xpx %xpx rgba(0, 0, 0, %x), 0 %xpx %xpx rgba(0, 0, 0, %x)",
-            from: [3, 6, 0.16, 3, 6, 0.23],
-            to: [1, 3, 0.13, 1, 3, 0.23],
+            fvalue: getShadowFormatValue(),
+            from: [],
+            to: getShadowValue(1),
           },
         ],
         duration: 0.3,

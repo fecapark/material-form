@@ -1,11 +1,19 @@
-import { HistoryData, ValidatableData } from "AnimationHistory-Type";
-import { AnimationData, Nullable } from "Animator-Type";
+import {
+  AbstractAnimationHistoryStorage,
+  HistoryData,
+  ValidatableData,
+} from "AnimationHistory-Type";
+import { AnimationData } from "Animator-Type";
 
 class HistoryStack {
-  datas: Array<HistoryData> = [];
+  private static datas: Array<HistoryData> = [];
 
-  public popBy(key: (data: HistoryData) => boolean): HistoryData | Nullable {
-    return this.datas
+  get length(): number {
+    return HistoryStack.datas.length;
+  }
+
+  public popBy(key: (data: HistoryData) => boolean): HistoryData | undefined {
+    return HistoryStack.datas
       .filter((aHistoryData) => {
         return key(aHistoryData);
       })
@@ -16,16 +24,22 @@ class HistoryStack {
     data: HistoryData,
     isSameData: (data: HistoryData) => boolean
   ) {
-    this.datas = this.datas.filter((aHistoryData) => {
+    HistoryStack.datas = HistoryStack.datas.filter((aHistoryData) => {
       return !isSameData(aHistoryData);
     });
 
-    this.datas.push(data);
+    HistoryStack.datas.push(data);
   }
 }
 
-export default class AnimationHistoryStorage {
+export default class AnimationHistoryStorage
+  implements AbstractAnimationHistoryStorage
+{
   private historyStack: HistoryStack = new HistoryStack();
+
+  get length(): number {
+    return this.historyStack.length;
+  }
 
   private isFindingData(
     historyData: HistoryData,
@@ -40,16 +54,15 @@ export default class AnimationHistoryStorage {
 
   public find(
     target: HTMLElement,
-    toFindData: AnimationData.StyleData
-  ): HistoryData | Nullable {
-    const { prop, fvalue }: { prop: string; fvalue: string } = toFindData;
-
+    prop: string,
+    fvalue: string
+  ): HistoryData | undefined {
     return this.historyStack.popBy((aHistoryData) =>
       this.isFindingData(aHistoryData, { target, prop, fvalue })
     );
   }
 
-  public push(aAnimationData: AnimationData.Parsed) {
+  public push(aAnimationData: AnimationData.Custom | AnimationData.Parsed) {
     const {
       target,
       styles,

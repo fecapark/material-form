@@ -1,7 +1,9 @@
 import { AnimationSequence } from "Animator-Type";
+import AnimationHistoryStorage from "./AnimationHistoryStorage";
 import Animator from "./Animator";
 
 export default class SequenceAnimator {
+  private animationHistoryStorage: AnimationHistoryStorage;
   private sequences: Array<AnimationSequence.Parsed>;
   private idx: number = 0;
   private endCount: number = 0;
@@ -11,6 +13,7 @@ export default class SequenceAnimator {
     customSequences: Array<AnimationSequence.Custom>,
     private readonly onAllEnd: () => void = () => {}
   ) {
+    this.animationHistoryStorage = new AnimationHistoryStorage();
     this.sequences = this.parseData(customSequences);
   }
 
@@ -35,10 +38,13 @@ export default class SequenceAnimator {
     this.isPaused = false;
 
     this.currentSequence.forEach((aAnimationData) => {
-      // Animate!
-      new Animator(aAnimationData, this.checkToNextSequence.bind(this)).play();
+      new Animator(
+        aAnimationData,
+        this.checkToNextSequence.bind(this),
+        this.animationHistoryStorage
+      ).play();
+      this.animationHistoryStorage.push(aAnimationData);
 
-      // Pause after current sequence?
       if (aAnimationData.pauseOnEnd) {
         this.isPaused = true;
       }

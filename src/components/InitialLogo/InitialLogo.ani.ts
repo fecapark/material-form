@@ -1,5 +1,4 @@
-import { BezierValue } from "Animator-Type";
-import { AnimationSequence } from "SequenceAnimator-Type";
+import { AnimationSequence, BezierValue } from "Animator-Type";
 import SequenceAnimator from "../../lib/Animator/SequenceAnimator";
 
 function getFadeOutAniamtion(

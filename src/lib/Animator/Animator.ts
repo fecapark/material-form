@@ -1,5 +1,6 @@
 import BezierEasing from "bezier-easing";
 import { AnimationData, AnimatorClosure, BezierValue } from "Animator-Type";
+import { AbstractAnimationHistoryStorage } from "AnimationHistory-Type";
 
 const BEZIER_EASING_MAP: Record<string, BezierValue> = {
   linear: [0, 0, 1, 1],
@@ -14,16 +15,24 @@ export default class Animator {
 
   constructor(
     customData: AnimationData.Custom,
-    private readonly moreOnEnd: () => void = () => {}
+    private readonly moreOnEnd: () => void = () => {},
+    private readonly animationHistoryStorage: AbstractAnimationHistoryStorage
   ) {
     this.data = this.parseData(customData);
   }
 
   private parseData(customData: AnimationData.Custom): AnimationData.Parsed {
-    function checkDataFormat() {
-      customData.styles.forEach((aStyleData) => {
-        const { from, to }: { from: Array<number>; to: Array<number> } =
-          aStyleData;
+    function checkDataFormat(data: AnimationData.Parsed) {
+      data.styles.forEach((aStyleData) => {
+        const { fvalue, from, to }: AnimationData.StyleData = aStyleData;
+
+        if (fvalue.count("%x") !== from.length) {
+          throw RangeError(
+            `You must set amount of from values same as format keywords. (from: ${
+              from.length
+            }, format('%x'): ${fvalue.count("%x")})`
+          );
+        }
 
         if (from.length !== to.length) {
           throw RangeError(
@@ -33,22 +42,46 @@ export default class Animator {
       });
     }
 
-    checkDataFormat();
+    const parseStylesAsHistoryData = (): Array<AnimationData.StyleData> => {
+      return customData.styles.map((aStyleData) => {
+        const { prop, fvalue, from }: AnimationData.StyleData = aStyleData;
+
+        if (fvalue.includes("%x") && from.length === 0) {
+          const historyData = this.animationHistoryStorage.find(
+            customData.target,
+            prop,
+            fvalue
+          );
+
+          if (!historyData)
+            throw TypeError(
+              "You must set 'from' values for initial animation data."
+            );
+          aStyleData.from = [...historyData.to];
+        }
+
+        return aStyleData;
+      });
+    };
 
     const bezierValue =
       typeof customData.bezier === "string"
         ? BEZIER_EASING_MAP[customData.bezier]
         : customData.bezier ?? BEZIER_EASING_MAP["linear"];
 
-    return {
+    const resultData = {
       target: customData.target,
-      styles: customData.styles,
+      styles: parseStylesAsHistoryData(),
       duration: customData.duration,
       delay: customData.delay ?? 0,
       bezier: bezierValue,
       onEnd: customData.onEnd ?? (() => {}),
       pauseOnEnd: customData.pauseOnEnd ?? false,
     };
+
+    checkDataFormat(resultData);
+
+    return resultData;
   }
 
   private getCurrentValuesAsRatio(
