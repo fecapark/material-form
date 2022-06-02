@@ -14,7 +14,7 @@ export default class Router {
     this.addGlobalRouterEvents();
   }
 
-  addGlobalRouterEvents() {
+  private addGlobalRouterEvents() {
     if (Router.globalEventSetted) return;
     Router.globalEventSetted = true;
 
@@ -25,7 +25,7 @@ export default class Router {
     );
   }
 
-  getRouterDataFromElement(target: HTMLAnchorElement): string {
+  private getRouterDataFromElement(target: HTMLAnchorElement): string {
     const route: string = target.getAttribute("href")!;
 
     if (route === "")
@@ -34,7 +34,7 @@ export default class Router {
     return route;
   }
 
-  execute(e: Event) {
+  private execute(e: Event) {
     e.preventDefault(); // Prevent anchor redirect event
 
     const routeTriggerEvent = new CustomEvent("routetrigger", {
@@ -46,10 +46,11 @@ export default class Router {
   }
 
   renderViewWhenPopState() {
+    console.log("popstate");
     ROUTES.view(window.location.hash);
   }
 
-  renderViewWhenRouteTriggered(e: CustomEvent) {
+  private renderViewWhenRouteTriggered(e: CustomEvent) {
     const { href }: { href: string } = e.detail;
     ROUTES.viewWithRedirect(href);
   }

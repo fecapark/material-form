@@ -3,6 +3,7 @@ import { ROUTES } from "./core/Router/routes";
 import InitialLogo from "./components/InitialLogo/InitialLogo";
 import Component from "./core/Component/Component";
 import MainContainer from "./components/MainContainer/MainContainer";
+import Router from "./core/Router/Router";
 
 export default class App extends Component {
   appRendered: boolean = false;
@@ -22,6 +23,7 @@ export default class App extends Component {
     // Set routes
     this.setViews();
     ROUTES.setInitialRootPath();
+    new Router(document.createElement("a")); // Initialize router events
 
     this.render();
   }
