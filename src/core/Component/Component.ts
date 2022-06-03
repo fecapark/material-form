@@ -38,4 +38,29 @@ export default class Component {
   render() {
     throw Error("You must implement render method in component instance.");
   }
+
+  qs<K extends keyof HTMLElementTagNameMap>(
+    selector: string
+  ): HTMLElementTagNameMap[K] | null {
+    return this.container.querySelector(selector);
+  }
+
+  appendElementsTo(parentSelector: string, ...elements: Array<HTMLElement>) {
+    let parent = this.qs(parentSelector);
+
+    if (!parent)
+      if (parentSelector === "") parent = this.container;
+      else
+        throw TypeError(
+          `Cannot find elememnt using selector: ${parentSelector}`
+        );
+
+    elements.forEach((element) => {
+      parent!.appendChild(element);
+    });
+  }
+
+  html(): string {
+    return this.container.outerHTML;
+  }
 }

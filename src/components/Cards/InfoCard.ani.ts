@@ -44,6 +44,7 @@ function getHoverSplitAnimation(
   tagCard: HTMLElement
 ): Array<AnimationSequence.Custom> {
   const hoverMargin: number = 20;
+  console.log(headCard.getBoundingClientRect());
 
   return [
     {
@@ -53,7 +54,7 @@ function getHoverSplitAnimation(
           prop: "box-shadow",
           fvalue: getShadowFormatValue(),
           from: getShadowValue(0),
-          to: getShadowValue(3),
+          to: getShadowValue(5),
         },
       ],
       duration: 0.3,
@@ -84,7 +85,7 @@ function getHoverSplitAnimation(
             prop: "box-shadow",
             fvalue: getShadowFormatValue(),
             from: getShadowValue(0),
-            to: getShadowValue(2),
+            to: getShadowValue(4),
           },
         ],
         duration: 0.3,
@@ -99,7 +100,7 @@ function getHoverSplitAnimation(
           prop: "box-shadow",
           fvalue: getShadowFormatValue(),
           from: getShadowValue(0),
-          to: getShadowValue(1),
+          to: getShadowValue(2),
         },
         {
           prop: "transform",
@@ -129,7 +130,7 @@ function getHoverDownAnimation(
             prop: "box-shadow",
             fvalue: getShadowFormatValue(),
             from: [],
-            to: getShadowValue(1),
+            to: getShadowValue(2),
           },
         ],
         duration: 0.3,
@@ -143,7 +144,7 @@ function getHoverDownAnimation(
             prop: "box-shadow",
             fvalue: getShadowFormatValue(),
             from: [],
-            to: getShadowValue(1),
+            to: getShadowValue(2),
           },
         ],
         duration: 0.3,

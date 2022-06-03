@@ -11,9 +11,9 @@ export default class InitialLogo extends Component {
   render() {
     this.container.innerHTML = `
       <div id="logo-text-container">
-        <span id="sub-logo-text" class="dummy">material</span>
-        <span id="logo-text">Todo List</span>
         <span class="dummy"></span>
+        <span id="logo-text">Todo List</span>
+        <span id="sub-logo-text" class="dummy">With material design</span>
       </div>
         
       <div class="mask top"></div>
