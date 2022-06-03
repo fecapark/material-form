@@ -12,14 +12,22 @@ export default class MainContainer extends Component {
   }
 
   renderChilds(): Array<Component> {
+    const titleContainerSelector: string = ".card-title-container";
+    const titleSelector: string = `${titleContainerSelector} > .title`;
+    const subTitleSelector: string = `${titleContainerSelector} > .sub-title`;
+
     const headCard = new HeadInfoCard();
     const nameCard = new InfoCard(
       new TextInput("제 이름은...", {
         onFocus: () => {
-          nameCard.qs(".card-title-container")!.classList.add("hidden");
+          nameCard.qs(titleContainerSelector)!.classList.add("hidden");
+          nameCard.qs(titleSelector)!.classList.add("hidden");
+          nameCard.qs(subTitleSelector)!.classList.add("hidden");
         },
         onFocusout: () => {
-          nameCard.qs(".card-title-container")!.classList.remove("hidden");
+          nameCard.qs(titleContainerSelector)!.classList.remove("hidden");
+          nameCard.qs(titleSelector)!.classList.remove("hidden");
+          nameCard.qs(subTitleSelector)!.classList.remove("hidden");
         },
       })
     );

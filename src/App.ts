@@ -62,9 +62,9 @@ export default class App extends Component {
     }
 
     // When re-rendered before logo animation ends.
-    if (!this.store.getState("logoEnd")) {
-      throw Error("Un expected state change.");
-    }
+    // if (!this.store.getState("logoEnd")) {
+    //   throw Error("Un expected state change.");
+    // }
 
     // Branch routes for user logined before or else.
     if (this.store.getState("logined")) {
