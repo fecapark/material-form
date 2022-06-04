@@ -4,6 +4,7 @@ import HeadInfoCard from "../Cards/HeadInfoCard/HeadInfoCard";
 import InfoCard from "../Cards/InfoCard/InfoCard";
 import { executeAnimation } from "../Cards/InfoCard.ani";
 import TextInput from "../Inputs/TextInput/TextInput";
+import TagInput from "../Inputs/TagInput/TagInput";
 
 export default class MainContainer extends Component {
   constructor() {
@@ -11,7 +12,7 @@ export default class MainContainer extends Component {
     this.render();
   }
 
-  renderChilds(): Array<Component> {
+  private renderChilds(): Array<Component> {
     const titleContainerSelector: string = ".card-title-container";
     const titleSelector: string = `${titleContainerSelector} > .title`;
     const subTitleSelector: string = `${titleContainerSelector} > .sub-title`;
@@ -29,9 +30,30 @@ export default class MainContainer extends Component {
           nameCard.qs(titleSelector)!.classList.remove("hidden");
           nameCard.qs(subTitleSelector)!.classList.remove("hidden");
         },
-      })
+      }),
+      {
+        title: "이름은 무엇인가요?",
+        subTitle: "20자 이내에서 알려주세요!",
+      }
     );
-    const tagCard = new InfoCard(null);
+    const tagCard = new InfoCard(
+      new TagInput({
+        onFocus: () => {
+          tagCard.qs(titleContainerSelector)!.classList.add("hidden");
+          tagCard.qs(titleSelector)!.classList.add("hidden");
+          tagCard.qs(subTitleSelector)!.classList.add("hidden");
+        },
+        onFocusout: () => {
+          tagCard.qs(titleContainerSelector)!.classList.remove("hidden");
+          tagCard.qs(titleSelector)!.classList.remove("hidden");
+          tagCard.qs(subTitleSelector)!.classList.remove("hidden");
+        },
+      }),
+      {
+        title: "관심사도 자유롭게 알려주세요!",
+        subTitle: "관심사들을 5개까지 태그로 만들어드릴게요.",
+      }
+    );
 
     return [headCard, nameCard, tagCard];
   }

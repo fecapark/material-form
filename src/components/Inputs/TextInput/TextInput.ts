@@ -39,11 +39,11 @@ export default class TextInput extends Component {
     return this.inputElement.value;
   }
 
-  isValidTextLength(text: string): boolean {
+  private isValidTextLength(text: string): boolean {
     return new Range(text.length).moreThan(0).equalAndLessThan(20).isIn();
   }
 
-  addInputElementEvents() {
+  private addInputElementEvents() {
     this.inputElement.addEventListener("focus", () => {
       this.inputElement.classList.add("focused");
       this.placeholderElement.classList.add("focused");
@@ -72,7 +72,7 @@ export default class TextInput extends Component {
     });
   }
 
-  addPlaceholderElementEvents() {
+  private addPlaceholderElementEvents() {
     this.placeholderElement.addEventListener("click", (e: Event) => {
       e.stopPropagation();
       this.inputElement.focus();

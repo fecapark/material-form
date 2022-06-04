@@ -9,7 +9,7 @@ type ContainerInfos = {
 export default class Component {
   protected readonly store: Store;
   readonly container: HTMLElement;
-  id: string;
+  readonly id: string;
   classNames: Array<string>;
 
   constructor({
@@ -25,7 +25,7 @@ export default class Component {
     this.store.eventManager.subscribe("stateChange", () => this.render());
   }
 
-  createContainer(tagName: string): HTMLElement {
+  protected createContainer(tagName: string): HTMLElement {
     const container = document.createElement(tagName);
     container.id = this.id;
     this.classNames.forEach((aClassName) => {
@@ -35,8 +35,44 @@ export default class Component {
     return container;
   }
 
-  render() {
-    throw Error("You must implement render method in component instance.");
+  protected appendElementsTo(
+    parentSelector: string,
+    ...elements: Array<HTMLElement>
+  ) {
+    let parent = this.qs(parentSelector);
+
+    if (!parent) {
+      if (parentSelector !== "")
+        throw TypeError(
+          `Cannot find elememnt using selector: ${parentSelector}`
+        );
+
+      parent = this.container;
+    }
+
+    elements.forEach((element) => {
+      parent!.appendChild(element);
+    });
+  }
+
+  protected prependElementsTo(
+    parentSelector: string,
+    ...elements: Array<HTMLElement>
+  ) {
+    let parent = this.qs(parentSelector);
+
+    if (!parent) {
+      if (parentSelector !== "")
+        throw TypeError(
+          `Cannot find elememnt using selector: ${parentSelector}`
+        );
+
+      parent = this.container;
+    }
+
+    elements.forEach((element) => {
+      parent!.prepend(element);
+    });
   }
 
   qs<K extends keyof HTMLElementTagNameMap>(
@@ -45,22 +81,11 @@ export default class Component {
     return this.container.querySelector(selector);
   }
 
-  appendElementsTo(parentSelector: string, ...elements: Array<HTMLElement>) {
-    let parent = this.qs(parentSelector);
-
-    if (!parent)
-      if (parentSelector === "") parent = this.container;
-      else
-        throw TypeError(
-          `Cannot find elememnt using selector: ${parentSelector}`
-        );
-
-    elements.forEach((element) => {
-      parent!.appendChild(element);
-    });
-  }
-
   html(): string {
     return this.container.outerHTML;
+  }
+
+  render() {
+    throw Error("You must implement render method in component instance.");
   }
 }

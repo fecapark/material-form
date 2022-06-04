@@ -20,6 +20,7 @@ export default defineConfig(({ command, mode }) => {
       base: `/proxy/${process.env.VITE_CODE_SERVER_DEV_PORT}/`,
       server: {
         port: parseInt(process.env.VITE_CODE_SERVER_DEV_PORT),
+        strictPort: true, // Prevent auto polling for restart
       },
       css: SCSS_OPTIONS(),
     };
