@@ -12,9 +12,11 @@ export default class TagInput extends Component {
   private readonly onFocus: () => void;
   private readonly onFocusout: () => void;
   private readonly MAX_TEXT_LENGTH: number = 10;
+  private readonly MAX_TAG_AMOUNT: number = 5;
 
   private inputElement: HTMLInputElement | null = null;
   private isPressingBackspace: boolean = false;
+  private removeFromMaxAmount: boolean = false;
 
   constructor({
     onFocus = () => {},
@@ -51,10 +53,16 @@ export default class TagInput extends Component {
 
   private submitTag(e: Event) {
     e.preventDefault();
+    const tags: Array<TagBlock> = this.store.getState("tags");
 
     if (!this.inputElement) return;
     if (this.inputElement.value === "") return;
     if (!this.isValidTextLength(this.inputElement.value)) return;
+    if (tags.length >= this.MAX_TAG_AMOUNT) {
+      const warn = this.qs(".warn-container")!;
+      warn.classList.remove("hidden");
+      return;
+    }
 
     this.store.dispatch("addTag", {
       newTag: new TagBlock(this.inputElement.value),
@@ -109,14 +117,23 @@ export default class TagInput extends Component {
   }
 
   private handleRemoveingTagByKey(e: KeyboardEvent) {
-    e.stopPropagation();
-    if (e.key !== "Backspace") return;
-    if (this.inputElement!.value !== "") return;
-    if (this.isPressingBackspace) return;
+    const isRemoveFromMaxAmount = (): boolean => {
+      const warn: HTMLElement = this.qs(".warn-container")!;
+      return (
+        tags.length >= this.MAX_TAG_AMOUNT && !warn.classList.contains("hidden")
+      );
+    };
 
+    e.stopPropagation();
     const tags: Array<TagBlock> = this.store.getState("tags");
     const latestTag: TagBlock = tags[tags.length - 1];
 
+    if (e.key !== "Backspace") return;
+    if (tags.length === 0) return;
+    if (this.isPressingBackspace) return;
+    if (this.inputElement!.value !== "") return;
+
+    this.removeFromMaxAmount = isRemoveFromMaxAmount();
     this.store.dispatch("removeTag", {
       removeId: latestTag.id,
     });
@@ -155,7 +172,18 @@ export default class TagInput extends Component {
   render() {
     this.container.innerHTML = `
       <div class="tag-inline-container"></div>
+      <div class="warn-container ${this.removeFromMaxAmount ? "" : "hidden"}">
+        <i class='fa-solid fa-circle-exclamation'></i>
+        <span class='warn-text'>우선 5개까지만 기억해볼게요.</span>
+      </div>
     `;
+
+    if (this.removeFromMaxAmount) {
+      requestAnimationFrame(() => {
+        this.qs(".warn-container")!.classList.add("hidden");
+        this.removeFromMaxAmount = false;
+      });
+    }
 
     const tags: Array<TagBlock> = this.store.getState("tags");
     this.appendElementsTo(

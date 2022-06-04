@@ -160,23 +160,22 @@ function switchToFlexStyles(
   nameCard: HTMLElement,
   tagCard: HTMLElement
 ) {
-  return () => {
-    // Set card container flex-box
-    cardContainer.style.display = "flex";
-    cardContainer.style.flexDirection = "column-reverse";
-    cardContainer.style.justifyContent = "center";
+  // Set card container flex-box
+  cardContainer.style.display = "flex";
+  cardContainer.style.flexDirection = "column-reverse";
+  cardContainer.style.justifyContent = "center";
 
-    // All card position to 'static' (default)
-    headCard.style.position = "static";
-    headCard.style.transform = "translate3d(0, 0, 0)";
+  // All card position to 'static' (default)
+  headCard.style.position = "static";
+  headCard.style.transform = "translate3d(0, 0, 0)";
 
-    nameCard.style.position = "static";
-    nameCard.style.transform = "translate3d(0, 0, 0)";
-    nameCard.style.margin = "20px 0";
+  nameCard.style.position = "static";
+  nameCard.style.transform = "translate3d(0, 0, 0)";
+  nameCard.style.margin = "20px 0";
 
-    tagCard.style.position = "static";
-    tagCard.style.transform = "translate3d(0, 0, 0)";
-  };
+  tagCard.style.position = "static";
+  tagCard.style.transform = "translate3d(0, 0, 0)";
+  tagCard.style.height = "auto";
 }
 
 export function executeAnimation(

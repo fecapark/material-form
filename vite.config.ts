@@ -21,6 +21,11 @@ export default defineConfig(({ command, mode }) => {
       server: {
         port: parseInt(process.env.VITE_CODE_SERVER_DEV_PORT),
         strictPort: true, // Prevent auto polling for restart
+        hmr: {
+          host: "ws",
+          port: 3000,
+          clientPort: 3000,
+        },
       },
       css: SCSS_OPTIONS(),
     };
