@@ -13,11 +13,10 @@ export default class MainContainer extends Component {
   private readonly TITLE_SELECTOR: string = `${this.TITLE_CONTAINER_SELECTOR} > .title`;
   private readonly SUB_TITLE_SELECTOR: string = `${this.TITLE_CONTAINER_SELECTOR} > .sub-title`;
 
-  // 이거 고쳐야 함
-  private headCard: HeadInfoCard;
-  private nameCard: InfoCard;
-  private tagCard: InfoCard;
-  private button: CircleButton;
+  private headCard: HeadInfoCard | null = null;
+  private nameCard: InfoCard | null = null;
+  private tagCard: InfoCard | null = null;
+  private button: CircleButton | null = null;
 
   private nameInfoValid: boolean = false;
   private tagInfoValid: boolean = false;
@@ -111,17 +110,17 @@ export default class MainContainer extends Component {
     };
 
     const executeMergeAnimation = () => {
-      const nameInput = this.nameCard.cardContent as TextInput;
-      const tagInput = this.tagCard.cardContent as TagInput;
+      const nameInput = this.nameCard!.cardContent as TextInput;
+      const tagInput = this.tagCard!.cardContent as TagInput;
 
       requestAnimationFrame(() => {
         mergeAnimation(
           this.cardContainer,
-          this.headCard.container,
-          this.nameCard.container,
-          this.tagCard.container,
+          this.headCard!.container,
+          this.nameCard!.container,
+          this.tagCard!.container,
           () => {
-            this.headCard.triggerResultProfile({
+            this.headCard!.triggerResultProfile({
               name: nameInput.value,
               tags: tagInput.tags.map((aTagBlock) => {
                 aTagBlock.toggleCloseButton();
@@ -170,9 +169,9 @@ export default class MainContainer extends Component {
     requestAnimationFrame(() => {
       splitAnimation(
         this.cardContainer,
-        this.headCard.container,
-        this.nameCard.container,
-        this.tagCard.container
+        this.headCard!.container,
+        this.nameCard!.container,
+        this.tagCard!.container
       );
     });
   }
