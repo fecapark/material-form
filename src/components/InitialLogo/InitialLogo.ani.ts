@@ -5,23 +5,25 @@ function getFadeOutAniamtion(
   target: HTMLElement
 ): Array<AnimationSequence.Custom> {
   return [
-    {
-      target,
-      styles: [
-        {
-          prop: "opacity",
-          fvalue: "%x",
-          from: () => [1],
-          to: () => [0],
+    [
+      {
+        target,
+        styles: [
+          {
+            prop: "opacity",
+            fvalue: "%x",
+            from: () => [1],
+            to: () => [0],
+          },
+        ],
+        duration: 0.4,
+        delay: 3,
+        bezier: [0.4, 0, 0.2, 1],
+        onEnd: () => {
+          target.style.visibility = "hidden";
         },
-      ],
-      duration: 0.4,
-      delay: 3,
-      bezier: [0.4, 0, 0.2, 1],
-      onEnd: () => {
-        target.style.visibility = "hidden";
       },
-    },
+    ],
   ];
 }
 

@@ -20,6 +20,8 @@
 
       width: 0;
       height: 0;
+
+      z-index: 10000;
     }
 
     i {
@@ -27,8 +29,6 @@
       font-size: 14px;
       color: $secondary-text-color;
       align-self: flex-start;
-
-      // visibility: hidden;
 
       opacity: 0;
     }
@@ -44,14 +44,14 @@
       .info-name {
         font-size: 18px;
         font-weight: 900;
-        margin-bottom: 3px;
+        margin-bottom: 5px;
         color: $primary-color;
 
         opacity: 0;
       }
 
       .info-remember {
-        font-size: 11px;
+        font-size: 12px;
         color: $secondary-text-color;
         letter-spacing: 0.3px;
 
@@ -59,10 +59,16 @@
       }
     }
 
-    .info-tag-container {
+    .dividor {
+      width: calc(100% - 40px);
+      height: 1px;
+      background-color: $dividor-color;
+      margin-bottom: 25px;
       opacity: 0;
-      width: 100%;
+    }
 
+    .info-tag-container {
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -72,14 +78,18 @@
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-
         max-width: 100%;
+
+        opacity: 0;
       }
 
       .info-tag-text {
-        margin-top: 5px;
-        display: block;
+        font-size: 12px;
         color: $primary-text-color;
+        margin-top: 5px;
+        font-weight: 500;
+
+        opacity: 0;
       }
     }
   }

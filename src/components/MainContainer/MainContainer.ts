@@ -12,21 +12,18 @@ export default class MainContainer extends Component {
   private readonly TITLE_CONTAINER_SELECTOR: string = ".card-title-container";
   private readonly TITLE_SELECTOR: string = `${this.TITLE_CONTAINER_SELECTOR} > .title`;
   private readonly SUB_TITLE_SELECTOR: string = `${this.TITLE_CONTAINER_SELECTOR} > .sub-title`;
-  private readonly headCard: HeadInfoCard;
-  private readonly nameCard: InfoCard;
-  private readonly tagCard: InfoCard;
-  private readonly button: CircleButton;
+
+  // 이거 고쳐야 함
+  private headCard: HeadInfoCard;
+  private nameCard: InfoCard;
+  private tagCard: InfoCard;
+  private button: CircleButton;
 
   private nameInfoValid: boolean = false;
   private tagInfoValid: boolean = false;
 
   constructor() {
     super({ id: "main-container" });
-
-    this.headCard = this.renderHeadCard();
-    this.nameCard = this.renderNameCard();
-    this.tagCard = this.renderTagCard();
-    this.button = this.renderButton();
 
     this.render();
   }
@@ -48,7 +45,7 @@ export default class MainContainer extends Component {
   }
 
   private renderHeadCard(): HeadInfoCard {
-    return new HeadInfoCard();
+    return new HeadInfoCard(this.render.bind(this));
   }
 
   private renderNameCard(): InfoCard {
@@ -154,6 +151,13 @@ export default class MainContainer extends Component {
     this.container.innerHTML = `
       <div class="card-container"></div>
     `;
+
+    this.nameInfoValid = false;
+    this.tagInfoValid = false;
+    this.headCard = this.renderHeadCard();
+    this.nameCard = this.renderNameCard();
+    this.tagCard = this.renderTagCard();
+    this.button = this.renderButton();
 
     this.prependElementsTo(
       ".card-container",

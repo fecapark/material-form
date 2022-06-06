@@ -7,6 +7,7 @@ interface TagBlockOptions {
 
 export default class TagBlock extends Component {
   public readonly text: string;
+  private readonly colorString: string;
 
   constructor(text: string, { hasCloseButton = true }: TagBlockOptions = {}) {
     const { hash, salt }: { hash: string; salt: string } = text.getHash();
@@ -18,6 +19,7 @@ export default class TagBlock extends Component {
     });
 
     this.text = this.parseHashText(text);
+    this.colorString = this.getRandomBackgroundColor();
 
     this.render();
   }
@@ -34,12 +36,12 @@ export default class TagBlock extends Component {
     return `#${text}`;
   }
 
-  private setRandomBackgroundColor() {
+  private getRandomBackgroundColor() {
     const hue: number = Math.floor(Math.random() * 360);
     const saturation: number = Math.floor(Math.random() * 10) + 55;
     const lightness: number = Math.floor(Math.random() * 10) + 75;
 
-    this.container.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   }
 
   render() {
@@ -50,6 +52,6 @@ export default class TagBlock extends Component {
       ${hasCloseButton ? "<i class='fa-solid fa-xmark'></i>" : ""}
     `;
 
-    this.setRandomBackgroundColor();
+    this.container.style.backgroundColor = this.colorString;
   }
 }

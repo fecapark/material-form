@@ -7,20 +7,35 @@ function getHeadCardTextFadeInAnimation(
   headCard: HTMLElement
 ): Array<AnimationSequence.Custom> {
   return [
-    {
-      target: headCard.querySelector(".title-text")!,
-      styles: [
-        {
-          prop: "opacity",
-          fvalue: "%x",
-          from: () => [0],
-          to: () => [1],
-        },
-      ],
-      duration: 0.6,
-      bezier: "ease",
-      delay: 0.2,
-    },
+    [
+      {
+        target: headCard,
+        styles: [
+          {
+            prop: "box-shadow",
+            fvalue: getShadowFormatValue(),
+            from: () => getShadowValue(0),
+            to: () => getShadowValue(2),
+          },
+        ],
+        duration: 0.35,
+        bezier: "material-normal",
+      },
+      {
+        target: headCard.querySelector(".title-text")!,
+        styles: [
+          {
+            prop: "opacity",
+            fvalue: "%x",
+            from: () => [0],
+            to: () => [1],
+          },
+        ],
+        duration: 0.6,
+        bezier: "ease",
+        delay: 0.2,
+      },
+    ],
     {
       target: headCard.querySelector(".sub-title-text")!,
       styles: [
@@ -52,7 +67,7 @@ function getHoverSplitAnimation(
         {
           prop: "box-shadow",
           fvalue: getShadowFormatValue(),
-          from: () => getShadowValue(0),
+          from: () => [],
           to: () => getShadowValue(5),
         },
       ],

@@ -1,6 +1,7 @@
 import "./HeadInfoCard.scss";
 import Component from "../../../core/Component/Component";
-import { executeAnimation } from "./HeadInfoCardMask.ani";
+import { executeAnimation as resultProfileAnimation } from "./ResultProfileTrigger.ani";
+import { executeAnimation as backMaskAnimation } from "./BackMask.ani";
 import TagBlock from "../../Tag/TagBlock/TagBlock";
 
 interface ResultProfileData {
@@ -11,7 +12,7 @@ interface ResultProfileData {
 export default class HeadInfoCard extends Component {
   private resultProfileData: ResultProfileData = { name: "", tags: [] };
 
-  constructor() {
+  constructor(private reRenderCardContainer: () => void) {
     super({ classNames: ["info-card", "head"] });
 
     this.store.setDefaultState("resultProfileTriggered", false);
@@ -48,6 +49,7 @@ export default class HeadInfoCard extends Component {
                 this.resultProfileData.name
               }님을 기억할게요.</span>
             </div>
+            <div class="dividor"></div>
             <div class="info-tag-container">
               <div class="tag-block-container"></div>
               <span class="info-tag-text">총 ${
@@ -67,8 +69,19 @@ export default class HeadInfoCard extends Component {
           .map((aTagBlock) => aTagBlock.container)
       );
 
+      const backButton = this.qs(".fa-chevron-left")! as HTMLElement;
+      backButton.addEventListener("pointerdown", () => {
+        requestAnimationFrame(() => {
+          backMaskAnimation(
+            this.container,
+            this.qs(".i-mask")!,
+            this.reRenderCardContainer
+          );
+        });
+      });
+
       requestAnimationFrame(() => {
-        executeAnimation(
+        resultProfileAnimation(
           this.container,
           this.qs(".dark-mask")!,
           this.qs(".sub-mask")!

@@ -132,7 +132,7 @@ function resultProfileAppearMixin(
         {
           prop: "transform",
           fvalue: "translate3d(%xpx, %xpx, 0)",
-          from: () => [15, 8],
+          from: () => [15, 12],
           to: () => [0, 0],
         },
       ],
@@ -189,6 +189,9 @@ function resultProfileAppearMixin(
 function appearTagInfoAnimation(
   headCard: HTMLElement
 ): Array<AnimationSequence.Custom> {
+  const dividor: HTMLElement = headCard.querySelector(
+    ".result-profile-container > .dividor"
+  )!;
   const infoTagContainer: HTMLElement = headCard.querySelector(
     ".result-profile-container > .info-tag-container"
   )!;
@@ -206,17 +209,51 @@ function appearTagInfoAnimation(
               return [
                 headCard.getBoundingClientRect().height +
                   infoTagContainer.getBoundingClientRect().height +
-                  20,
+                  40,
               ];
             },
           },
         ],
         duration: 0.35,
-        delay: 0.2,
+        delay: 0.3,
         bezier: "material-normal",
       },
       {
-        target: infoTagContainer,
+        target: dividor,
+        styles: [
+          {
+            prop: "opacity",
+            fvalue: "%x",
+            from: () => [0],
+            to: () => [1],
+          },
+        ],
+        duration: 0.35,
+        bezier: "material-normal",
+        delay: 0.5,
+      },
+      {
+        target: infoTagContainer.querySelector(".tag-block-container")!,
+        styles: [
+          {
+            prop: "opacity",
+            fvalue: "%x",
+            from: () => [0],
+            to: () => [1],
+          },
+          {
+            prop: "transform",
+            fvalue: "translate3d(0, %xpx, 0)",
+            from: () => [-15],
+            to: () => [0],
+          },
+        ],
+        duration: 0.45,
+        delay: 0.55,
+        bezier: "material-normal",
+      },
+      {
+        target: infoTagContainer.querySelector(".info-tag-text")!,
         styles: [
           {
             prop: "opacity",
@@ -232,7 +269,7 @@ function appearTagInfoAnimation(
           },
         ],
         duration: 0.45,
-        delay: 0.3,
+        delay: 0.68,
         bezier: "material-normal",
       },
     ],
