@@ -5,6 +5,7 @@ import "./TextInput.scss";
 interface TextInputOptions {
   onFocus?: () => void;
   onFocusout?: () => void;
+  onInput?: () => void;
 }
 
 export default class TextInput extends Component {
@@ -14,15 +15,21 @@ export default class TextInput extends Component {
 
   private readonly onFocus: () => void;
   private readonly onFocusout: () => void;
+  private readonly onInput: () => void;
 
   constructor(
     public placeholder: string = "",
-    { onFocus = () => {}, onFocusout = () => {} }: TextInputOptions = {}
+    {
+      onFocus = () => {},
+      onFocusout = () => {},
+      onInput = () => {},
+    }: TextInputOptions = {}
   ) {
     super({ classNames: ["text-input-container"] });
 
     this.onFocus = onFocus;
     this.onFocusout = onFocusout;
+    this.onInput = onInput;
 
     this.render();
   }
@@ -37,6 +44,10 @@ export default class TextInput extends Component {
 
   private get value(): string {
     return this.inputElement.value;
+  }
+
+  public get isValid(): boolean {
+    return this.isValidTextLength(this.value);
   }
 
   private isValidTextLength(text: string): boolean {
@@ -69,6 +80,8 @@ export default class TextInput extends Component {
       } else {
         warn.classList.remove("hidden");
       }
+
+      this.onInput();
     });
   }
 

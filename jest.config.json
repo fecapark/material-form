@@ -6,7 +6,7 @@
   "testEnvironment": "jsdom",
   "moduleNameMapper": {
     "^@/(.*)$": "<rootDir>/$1",
-    "\\.(css|less|scss)$": "<rootDir>/src/mock-dummy.ts"
+    "\\.(css|less|scss)$": "<rootDir>/src/jest-mock-module.ts"
   },
   "testMatch": [
     "<rootDir>/**/*.test.(js|jsx|ts|tsx)",

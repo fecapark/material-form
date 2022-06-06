@@ -28,9 +28,11 @@ export default class TagBlock extends Component {
   }
 
   setRandomBackgroundColor() {
-    this.container.style.backgroundColor = `hsl(${Math.floor(
-      Math.random() * 360
-    )}, 60%, 75%)`;
+    const hue: number = Math.floor(Math.random() * 360);
+    const saturation: number = Math.floor(Math.random() * 10) + 55;
+    const lightness: number = Math.floor(Math.random() * 10) + 75;
+
+    this.container.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   }
 
   render() {

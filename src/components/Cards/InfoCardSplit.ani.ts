@@ -13,8 +13,8 @@ function getHeadCardTextFadeInAnimation(
         {
           prop: "opacity",
           fvalue: "%x",
-          from: [0],
-          to: [1],
+          from: () => [0],
+          to: () => [1],
         },
       ],
       duration: 0.6,
@@ -27,8 +27,8 @@ function getHeadCardTextFadeInAnimation(
         {
           prop: "opacity",
           fvalue: "%x",
-          from: [0],
-          to: [1],
+          from: () => [0],
+          to: () => [1],
         },
       ],
       duration: 0.6,
@@ -53,8 +53,8 @@ function getHoverSplitAnimation(
         {
           prop: "box-shadow",
           fvalue: getShadowFormatValue(),
-          from: getShadowValue(0),
-          to: getShadowValue(5),
+          from: () => getShadowValue(0),
+          to: () => getShadowValue(5),
         },
       ],
       duration: 0.3,
@@ -68,14 +68,14 @@ function getHoverSplitAnimation(
           {
             prop: "transform",
             fvalue: "translate3d(0, %xpx, 0)",
-            from: [-headCard.getBoundingClientRect().height / 2],
-            to: [
+            from: () => [-headCard.getBoundingClientRect().height / 2],
+            to: () => [
               -headCard.getBoundingClientRect().height / 2 - 135 - hoverMargin,
             ],
           },
         ],
         duration: 0.35,
-        delay: 0.2,
+        delay: 0.1,
         bezier: "material-normal",
       },
       {
@@ -84,12 +84,12 @@ function getHoverSplitAnimation(
           {
             prop: "box-shadow",
             fvalue: getShadowFormatValue(),
-            from: getShadowValue(0),
-            to: getShadowValue(4),
+            from: () => getShadowValue(0),
+            to: () => getShadowValue(4),
           },
         ],
         duration: 0.3,
-        delay: 0.3,
+        delay: 0.2,
         bezier: "material-normal",
       },
     ],
@@ -99,14 +99,14 @@ function getHoverSplitAnimation(
         {
           prop: "box-shadow",
           fvalue: getShadowFormatValue(),
-          from: getShadowValue(0),
-          to: getShadowValue(2),
+          from: () => getShadowValue(0),
+          to: () => getShadowValue(2),
         },
         {
           prop: "transform",
           fvalue: "translate3d(0, %xpx, 0)",
-          from: [-headCard.getBoundingClientRect().height / 2],
-          to: [
+          from: () => [-headCard.getBoundingClientRect().height / 2],
+          to: () => [
             -headCard.getBoundingClientRect().height / 2 + 135 + hoverMargin,
           ],
         },
@@ -129,8 +129,8 @@ function getHoverDownAnimation(
           {
             prop: "box-shadow",
             fvalue: getShadowFormatValue(),
-            from: [],
-            to: getShadowValue(2),
+            from: () => [],
+            to: () => getShadowValue(2),
           },
         ],
         duration: 0.3,
@@ -143,8 +143,8 @@ function getHoverDownAnimation(
           {
             prop: "box-shadow",
             fvalue: getShadowFormatValue(),
-            from: [],
-            to: getShadowValue(2),
+            from: () => [],
+            to: () => getShadowValue(2),
           },
         ],
         duration: 0.3,
@@ -165,15 +165,17 @@ function switchToFlexStyles(
   cardContainer.style.flexDirection = "column-reverse";
   cardContainer.style.justifyContent = "center";
 
-  // All card position to 'static' (default)
-  headCard.style.position = "static";
+  headCard.style.position = "relative";
+  headCard.style.top = "0";
   headCard.style.transform = "translate3d(0, 0, 0)";
 
-  nameCard.style.position = "static";
+  nameCard.style.position = "relative";
+  nameCard.style.top = "0";
   nameCard.style.transform = "translate3d(0, 0, 0)";
   nameCard.style.margin = "20px 0";
 
-  tagCard.style.position = "static";
+  tagCard.style.position = "relative";
+  tagCard.style.top = "0";
   tagCard.style.transform = "translate3d(0, 0, 0)";
   tagCard.style.height = "auto";
 }

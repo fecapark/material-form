@@ -1,0 +1,64 @@
+.circle-button {
+  all: unset;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  // 사지방에서 테스팅 해야함.
+  position: sticky;
+  bottom: 2em;
+  margin-top: 2em;
+
+  // sticky 되먼 이거로 하고싶음... 그게 아니면 평소에는 중간에 놓기
+  // align-self: flex-end;
+  align-self: center;
+
+  overflow: hidden;
+  border-radius: 50%;
+
+  background-color: $secondary-color;
+  cursor: pointer;
+  z-index: 1000;
+
+  width: 3.6em;
+  height: 3.6em;
+  font-size: 20px;
+
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.hidden {
+    transition: 0.25s cubic-bezier(0, 0, 0.2, 1);
+    opacity: 0;
+    font-size: 0;
+  }
+
+  i {
+    color: white;
+  }
+
+  .ripple {
+    position: absolute;
+    background-color: black;
+    opacity: 0.15;
+    border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+    transform: translate3d(-50%, -50%, 0);
+    animation: ripple-effect cubic-bezier(0, 0, 0.2, 1) 0.8s forwards;
+  }
+}
+
+@keyframes ripple-effect {
+  0% {
+    opacity: 0.15;
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  100% {
+    opacity: 0;
+    width: 12em;
+    height: 12em;
+  }
+}

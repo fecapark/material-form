@@ -18,7 +18,9 @@ export default class Component {
     classNames = [],
   }: ContainerInfos = {}) {
     this.id = id;
-    this.classNames = classNames;
+    this.classNames = classNames.filter((aClassName) => {
+      return aClassName.trim() !== "";
+    });
     this.container = this.createContainer(tagName);
 
     this.store = new Store();
@@ -78,7 +80,11 @@ export default class Component {
   qs<K extends keyof HTMLElementTagNameMap>(
     selector: string
   ): HTMLElementTagNameMap[K] | null {
-    return this.container.querySelector(selector);
+    try {
+      return this.container.querySelector(selector);
+    } catch (e) {
+      return null;
+    }
   }
 
   html(): string {

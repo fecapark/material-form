@@ -19,7 +19,7 @@ declare module "AnimationHistory-Type" {
   }
 
   export interface HistoryData extends ValidatableData {
-    from: Array<number>;
-    to: Array<number>;
+    from: () => Array<number>;
+    to: () => Array<number>;
   }
 }

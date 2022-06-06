@@ -1,7 +1,7 @@
 import "./shadow.scss";
 import { Range } from "../Range/Range";
 
-const MAX_SHADOW_LEVEL: number = 4;
+const MAX_SHADOW_LEVEL: number = 5;
 const SHADOW_VALUE_DATAS: Record<string, Array<number>> = {
   "0": [0, 0, 0, 0, 0, 0],
   "1": [1, 3, 0.12, 1, 2, 0.24],
@@ -34,7 +34,8 @@ function setShadow(element: HTMLElement, toLv?: number) {
     return;
   }
 
-  element.classList.add(`shadow-lv-${toLv}`);
+  const sv: Array<number> = getShadowValue(toLv);
+  element.style.boxShadow = `0 ${sv[0]}px ${sv[1]}px rgba(0, 0, 0, ${sv[2]}), 0 ${sv[3]}px ${sv[4]}px rgba(0, 0, 0, ${sv[5]})`;
 }
 
 function getShadowFormatValue(): string {

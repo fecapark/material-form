@@ -24,17 +24,20 @@ export default class Animator {
   private parseData(customData: AnimationData.Custom): AnimationData.Parsed {
     function checkDataFormat(data: AnimationData.Parsed) {
       data.styles.forEach((aStyleData) => {
+        console.log();
         const { fvalue, from, to }: AnimationData.StyleData = aStyleData;
+        const fromValues: Array<number> = from();
+        const toValues: Array<number> = to();
 
-        if (fvalue.count("%x") !== from.length) {
+        if (fvalue.count("%x") !== fromValues.length) {
           throw RangeError(
             `You must set amount of from values same as format keywords. (from: ${
-              from.length
+              fromValues.length
             }, format('%x'): ${fvalue.count("%x")})`
           );
         }
 
-        if (from.length !== to.length) {
+        if (fromValues.length !== toValues.length) {
           throw RangeError(
             "Animation from and to value must be matched one-to-one."
           );
@@ -45,8 +48,9 @@ export default class Animator {
     const parseStylesAsHistoryData = (): Array<AnimationData.StyleData> => {
       return customData.styles.map((aStyleData) => {
         const { prop, fvalue, from }: AnimationData.StyleData = aStyleData;
+        const fromValues: Array<number> = from();
 
-        if (fvalue.includes("%x") && from.length === 0) {
+        if (fvalue.includes("%x") && fromValues.length === 0) {
           const historyData = this.animationHistoryStorage.find(
             customData.target,
             prop,
@@ -57,7 +61,8 @@ export default class Animator {
             throw TypeError(
               "You must set 'from' values for initial animation data."
             );
-          aStyleData.from = [...historyData.to];
+
+          aStyleData.from = () => [...historyData.to()];
         }
 
         return aStyleData;
@@ -75,6 +80,7 @@ export default class Animator {
       duration: customData.duration,
       delay: customData.delay ?? 0,
       bezier: bezierValue,
+      onStart: customData.onStart ?? (() => {}),
       onEnd: customData.onEnd ?? (() => {}),
       pauseOnEnd: customData.pauseOnEnd ?? false,
     };
@@ -85,15 +91,15 @@ export default class Animator {
   }
 
   private getCurrentValuesAsRatio(
-    from: Array<number>,
-    to: Array<number>,
+    fromValues: Array<number>,
+    toValues: Array<number>,
     ratio: number
   ): Array<number> {
     const result: Array<number> = [];
 
-    for (let i = 0; i < from.length; i++) {
-      const aFrom = from[i];
-      const aTo = to[i];
+    for (let i = 0; i < fromValues.length; i++) {
+      const aFrom = fromValues[i];
+      const aTo = toValues[i];
 
       result.push(aFrom + (aTo - aFrom) * ratio);
     }
@@ -106,10 +112,12 @@ export default class Animator {
 
     animateStyles.forEach((aAnimateStyle) => {
       const { prop, fvalue, from, to }: AnimationData.StyleData = aAnimateStyle;
+      const fromValues: Array<number> = from();
+      const toValues: Array<number> = to();
 
       const animatedValue: string = this.parseFormatedStyleString(
         fvalue,
-        this.getCurrentValuesAsRatio(from, to, ratio)
+        this.getCurrentValuesAsRatio(fromValues, toValues, ratio)
       );
 
       this.data.target.style.setProperty(prop, animatedValue);
@@ -147,10 +155,14 @@ export default class Animator {
   }
 
   public play() {
+    const { onStart, target }: AnimationData.Parsed = this.data;
     this.animator = this.animator ?? this.getAnimator();
 
     setTimeout(() => {
-      requestAnimationFrame(this.runAnimationFrame.bind(this));
+      requestAnimationFrame(() => {
+        onStart({ target });
+        this.runAnimationFrame();
+      });
     }, this.data.delay * 1000);
   }
 

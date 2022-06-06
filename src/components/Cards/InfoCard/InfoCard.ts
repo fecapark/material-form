@@ -25,6 +25,7 @@ export default class InfoCard extends Component {
 
   render() {
     this.container.innerHTML = `
+      <div class="mask"></div>
       <div class="card-title-container">
         <span class="title">${this.title}</span>
         <span class="sub-title">${this.subTitle}</span>
@@ -32,7 +33,7 @@ export default class InfoCard extends Component {
     `;
 
     if (this.cardContent) {
-      this.container.appendChild(this.cardContent.container);
+      this.appendElementsTo("", this.cardContent.container);
     }
   }
 }

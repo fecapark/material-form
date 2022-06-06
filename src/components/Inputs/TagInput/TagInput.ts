@@ -6,11 +6,15 @@ import "./TagInput.scss";
 interface TagInputOptions {
   onFocus?: () => void;
   onFocusout?: () => void;
+  onSubmit?: () => void;
+  onRemoveTag?: () => void;
 }
 
 export default class TagInput extends Component {
   private readonly onFocus: () => void;
   private readonly onFocusout: () => void;
+  private readonly onSubmit: () => void;
+  private readonly onRemoveTag: () => void;
   private readonly MAX_TEXT_LENGTH: number = 10;
   private readonly MAX_TAG_AMOUNT: number = 5;
 
@@ -21,11 +25,15 @@ export default class TagInput extends Component {
   constructor({
     onFocus = () => {},
     onFocusout = () => {},
+    onSubmit = () => {},
+    onRemoveTag = () => {},
   }: TagInputOptions = {}) {
     super({ classNames: ["tag-input-container"] });
 
     this.onFocus = onFocus;
     this.onFocusout = onFocusout;
+    this.onSubmit = onSubmit;
+    this.onRemoveTag = onRemoveTag;
 
     this.store.setDefaultState("tags", []);
     this.store.setAction("addTag", ({ state, payload }) => {
@@ -44,11 +52,25 @@ export default class TagInput extends Component {
     this.render();
   }
 
+  public get isValid(): boolean {
+    return this.store.getState("tags").length > 0;
+  }
+
   private isValidTextLength(text: string): boolean {
     return new Range(text.trim().length)
       .moreThan(0)
       .equalAndLessThan(this.MAX_TEXT_LENGTH)
       .isIn();
+  }
+
+  private isUniqueTag(tag: TagBlock): boolean {
+    const tags: Array<TagBlock> = this.store.getState("tags");
+
+    return (
+      tags.filter((aTag) => {
+        return aTag.text === tag.text;
+      }).length === 0
+    );
   }
 
   private submitTag(e: Event) {
@@ -63,13 +85,16 @@ export default class TagInput extends Component {
       warn.classList.remove("hidden");
       return;
     }
+    const newTag = new TagBlock(this.inputElement.value);
+    if (!this.isUniqueTag(newTag)) {
+      this.inputElement.value = "";
+      return;
+    }
 
-    this.store.dispatch("addTag", {
-      newTag: new TagBlock(this.inputElement.value),
-    });
-
+    this.store.dispatch("addTag", { newTag });
     this.inputElement.value = "";
     this.inputElement.focus();
+    this.onSubmit();
   }
 
   private renderInputElement(): HTMLInputElement {
@@ -114,6 +139,7 @@ export default class TagInput extends Component {
 
     tagElement.remove();
     this.inputElement!.focus();
+    this.onRemoveTag();
   }
 
   private handleRemoveingTagByKey(e: KeyboardEvent) {
@@ -141,6 +167,7 @@ export default class TagInput extends Component {
     latestTag.container.remove();
     this.inputElement!.focus();
     this.isPressingBackspace = true;
+    this.onRemoveTag();
   }
 
   private handleInitializeKeyboardState(e: KeyboardEvent) {

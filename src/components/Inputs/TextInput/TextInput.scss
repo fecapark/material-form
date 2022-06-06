@@ -58,7 +58,8 @@
     align-items: center;
 
     color: $dark-primary-color;
-    transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.2s cubic-bezier(0, 0, 0.2, 1) 0.1s;
 
     i {
       margin-right: 5px;
@@ -75,6 +76,8 @@
       height: 0;
       margin-top: 0;
       opacity: 0;
+      transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.1s cubic-bezier(0, 0, 0.2, 1);
     }
   }
 }
