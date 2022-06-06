@@ -44,7 +44,6 @@ function getHoverSplitAnimation(
   tagCard: HTMLElement
 ): Array<AnimationSequence.Custom> {
   const hoverMargin: number = 20;
-  console.log(headCard.getBoundingClientRect());
 
   return [
     {

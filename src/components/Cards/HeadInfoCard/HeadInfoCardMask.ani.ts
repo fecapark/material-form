@@ -25,7 +25,6 @@ function unHoverAndTriggerMaskAndResultApperAnimation(
     resultProfile.style.width = `${width}px`;
     resultProfile.style.height = `${height}px`;
   };
-  let targetSize: number;
 
   return [
     [
@@ -49,13 +48,13 @@ function unHoverAndTriggerMaskAndResultApperAnimation(
             prop: "width",
             fvalue: "%xpx",
             from: () => [0],
-            to: () => [targetSize],
+            to: () => [calculateTargetSize()],
           },
           {
             prop: "height",
             fvalue: "%xpx",
             from: () => [0],
-            to: () => [targetSize],
+            to: () => [calculateTargetSize()],
           },
         ],
         duration: 0.5,
@@ -63,7 +62,6 @@ function unHoverAndTriggerMaskAndResultApperAnimation(
         bezier: "material-normal",
         onStart: () => {
           headCard.style.alignItems = "center";
-          targetSize = calculateTargetSize();
           setResultProfileSize();
         },
         onEnd: () => {
@@ -77,13 +75,13 @@ function unHoverAndTriggerMaskAndResultApperAnimation(
             prop: "width",
             fvalue: "%xpx",
             from: () => [0],
-            to: () => [targetSize],
+            to: () => [calculateTargetSize()],
           },
           {
             prop: "height",
             fvalue: "%xpx",
             from: () => [0],
-            to: () => [targetSize],
+            to: () => [calculateTargetSize()],
           },
         ],
         duration: 0.325,
@@ -191,25 +189,53 @@ function resultProfileAppearMixin(
 function appearTagInfoAnimation(
   headCard: HTMLElement
 ): Array<AnimationSequence.Custom> {
-  const resultProfile: HTMLElement = headCard.querySelector(
-    ".result-profile-container"
+  const infoTagContainer: HTMLElement = headCard.querySelector(
+    ".result-profile-container > .info-tag-container"
   )!;
 
   return [
-    {
-      target: headCard,
-      styles: [
-        {
-          prop: "height",
-          fvalue: "%xpx",
-          from: () => [headCard.getBoundingClientRect().height],
-          to: () => [200],
-        },
-      ],
-      duration: 0.5,
-      delay: 0.4,
-      bezier: "material-normal",
-    },
+    [
+      {
+        target: headCard,
+        styles: [
+          {
+            prop: "height",
+            fvalue: "%xpx",
+            from: () => [headCard.getBoundingClientRect().height],
+            to: () => {
+              return [
+                headCard.getBoundingClientRect().height +
+                  infoTagContainer.getBoundingClientRect().height +
+                  20,
+              ];
+            },
+          },
+        ],
+        duration: 0.35,
+        delay: 0.2,
+        bezier: "material-normal",
+      },
+      {
+        target: infoTagContainer,
+        styles: [
+          {
+            prop: "opacity",
+            fvalue: "%x",
+            from: () => [0],
+            to: () => [1],
+          },
+          {
+            prop: "transform",
+            fvalue: "translate3d(0, %xpx, 0)",
+            from: () => [-10],
+            to: () => [0],
+          },
+        ],
+        duration: 0.45,
+        delay: 0.3,
+        bezier: "material-normal",
+      },
+    ],
   ];
 }
 

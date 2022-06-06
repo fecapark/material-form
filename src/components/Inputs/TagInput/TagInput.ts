@@ -53,7 +53,11 @@ export default class TagInput extends Component {
   }
 
   public get isValid(): boolean {
-    return this.store.getState("tags").length > 0;
+    return this.tags.length > 0;
+  }
+
+  public get tags(): Array<TagBlock> {
+    return this.store.getState("tags");
   }
 
   private isValidTextLength(text: string): boolean {
@@ -64,10 +68,8 @@ export default class TagInput extends Component {
   }
 
   private isUniqueTag(tag: TagBlock): boolean {
-    const tags: Array<TagBlock> = this.store.getState("tags");
-
     return (
-      tags.filter((aTag) => {
+      this.tags.filter((aTag) => {
         return aTag.text === tag.text;
       }).length === 0
     );
@@ -75,12 +77,11 @@ export default class TagInput extends Component {
 
   private submitTag(e: Event) {
     e.preventDefault();
-    const tags: Array<TagBlock> = this.store.getState("tags");
 
     if (!this.inputElement) return;
     if (this.inputElement.value === "") return;
     if (!this.isValidTextLength(this.inputElement.value)) return;
-    if (tags.length >= this.MAX_TAG_AMOUNT) {
+    if (this.tags.length >= this.MAX_TAG_AMOUNT) {
       const warn = this.qs(".warn-container")!;
       warn.classList.remove("hidden");
       return;
@@ -108,7 +109,7 @@ export default class TagInput extends Component {
       this.onFocus();
     });
     this.inputElement.addEventListener("focusout", () => {
-      if (this.store.getState("tags").length > 0) return;
+      if (this.isValid) return;
 
       this.onFocusout();
     });
@@ -146,16 +147,16 @@ export default class TagInput extends Component {
     const isRemoveFromMaxAmount = (): boolean => {
       const warn: HTMLElement = this.qs(".warn-container")!;
       return (
-        tags.length >= this.MAX_TAG_AMOUNT && !warn.classList.contains("hidden")
+        this.tags.length >= this.MAX_TAG_AMOUNT &&
+        !warn.classList.contains("hidden")
       );
     };
 
     e.stopPropagation();
-    const tags: Array<TagBlock> = this.store.getState("tags");
-    const latestTag: TagBlock = tags[tags.length - 1];
+    const latestTag: TagBlock = this.tags[this.tags.length - 1];
 
     if (e.key !== "Backspace") return;
-    if (tags.length === 0) return;
+    if (this.tags.length === 0) return;
     if (this.isPressingBackspace) return;
     if (this.inputElement!.value !== "") return;
 
@@ -212,10 +213,9 @@ export default class TagInput extends Component {
       });
     }
 
-    const tags: Array<TagBlock> = this.store.getState("tags");
     this.appendElementsTo(
       ".tag-inline-container",
-      ...tags.map((aTagBlock) => {
+      ...this.tags.map((aTagBlock) => {
         return aTagBlock.container;
       }),
       this.renderTagInputWrapper()

@@ -3,12 +3,14 @@ import { Range } from "../../../lib/Range/Range";
 import "./TextInput.scss";
 
 interface TextInputOptions {
+  maxLength: number;
   onFocus?: () => void;
   onFocusout?: () => void;
   onInput?: () => void;
 }
 
 export default class TextInput extends Component {
+  private readonly MAX_TEXT_LEGNTH: number;
   private readonly inputElementClassName: string = "text-input";
   private readonly placeholderElementClassName: string =
     "text-input-placeholder";
@@ -20,13 +22,15 @@ export default class TextInput extends Component {
   constructor(
     public placeholder: string = "",
     {
+      maxLength,
       onFocus = () => {},
       onFocusout = () => {},
       onInput = () => {},
-    }: TextInputOptions = {}
+    }: TextInputOptions = { maxLength: Infinity }
   ) {
     super({ classNames: ["text-input-container"] });
 
+    this.MAX_TEXT_LEGNTH = maxLength;
     this.onFocus = onFocus;
     this.onFocusout = onFocusout;
     this.onInput = onInput;
@@ -42,7 +46,7 @@ export default class TextInput extends Component {
     return this.qs(`.${this.placeholderElementClassName}`)! as HTMLSpanElement;
   }
 
-  private get value(): string {
+  public get value(): string {
     return this.inputElement.value;
   }
 
@@ -51,7 +55,10 @@ export default class TextInput extends Component {
   }
 
   private isValidTextLength(text: string): boolean {
-    return new Range(text.length).moreThan(0).equalAndLessThan(20).isIn();
+    return new Range(text.length)
+      .moreThan(0)
+      .equalAndLessThan(this.MAX_TEXT_LEGNTH)
+      .isIn();
   }
 
   private addInputElementEvents() {

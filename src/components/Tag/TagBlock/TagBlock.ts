@@ -6,17 +6,24 @@ interface TagBlockOptions {
 }
 
 export default class TagBlock extends Component {
-  readonly text: string;
-  private readonly hasCloseButton: boolean;
+  public readonly text: string;
 
   constructor(text: string, { hasCloseButton = true }: TagBlockOptions = {}) {
     const { hash, salt }: { hash: string; salt: string } = text.getHash();
     super({ id: hash + salt, classNames: ["tag-block"] });
 
-    this.hasCloseButton = hasCloseButton;
+    this.store.setDefaultState("hasCloseButton", hasCloseButton);
+    this.store.setAction("toggleCloseButton", ({ state }) => {
+      return { hasCloseButton: !state.hasCloseButton };
+    });
+
     this.text = this.parseHashText(text);
 
     this.render();
+  }
+
+  public toggleCloseButton() {
+    this.store.dispatch("toggleCloseButton", {});
   }
 
   private parseHashText(text: string): string {
@@ -27,7 +34,7 @@ export default class TagBlock extends Component {
     return `#${text}`;
   }
 
-  setRandomBackgroundColor() {
+  private setRandomBackgroundColor() {
     const hue: number = Math.floor(Math.random() * 360);
     const saturation: number = Math.floor(Math.random() * 10) + 55;
     const lightness: number = Math.floor(Math.random() * 10) + 75;
@@ -36,9 +43,11 @@ export default class TagBlock extends Component {
   }
 
   render() {
+    const hasCloseButton: boolean = this.store.getState("hasCloseButton");
+
     this.container.innerHTML = `
       <span class="tag-text">${this.text}</span>
-      ${this.hasCloseButton ? "<i class='fa-solid fa-xmark'></i>" : ""}
+      ${hasCloseButton ? "<i class='fa-solid fa-xmark'></i>" : ""}
     `;
 
     this.setRandomBackgroundColor();

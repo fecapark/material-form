@@ -7,6 +7,7 @@ import TagInput from "../Inputs/TagInput/TagInput";
 import CircleButton from "../Buttons/CircleButton/CircleButton";
 import { executeAnimation as splitAnimation } from "../Cards/InfoCardSplit.ani";
 import { executeAnimation as mergeAnimation } from "../Cards/InfoCardMerge.ani";
+import TagBlock from "../Tag/TagBlock/TagBlock";
 
 export default class MainContainer extends Component {
   private readonly TITLE_CONTAINER_SELECTOR: string = ".card-title-container";
@@ -52,7 +53,9 @@ export default class MainContainer extends Component {
   }
 
   private renderNameCard(): InfoCard {
+    const MAX_TEXT_LEGNTH: number = 10;
     const textInput = new TextInput("제 이름은...", {
+      maxLength: MAX_TEXT_LEGNTH,
       onFocus: () => {
         nameCard.qs(this.TITLE_CONTAINER_SELECTOR)!.classList.add("hidden");
         nameCard.qs(this.TITLE_SELECTOR)!.classList.add("hidden");
@@ -70,7 +73,7 @@ export default class MainContainer extends Component {
     });
     const nameCard = new InfoCard(textInput, {
       title: "이름은 무엇인가요?",
-      subTitle: "20자 이내에서 알려주세요!",
+      subTitle: `${MAX_TEXT_LEGNTH}자 이내에서 알려주세요!`,
     });
 
     return nameCard;
@@ -112,6 +115,9 @@ export default class MainContainer extends Component {
     };
 
     const executeMergeAnimation = () => {
+      const nameInput = this.nameCard.cardContent as TextInput;
+      const tagInput = this.tagCard.cardContent as TagInput;
+
       requestAnimationFrame(() => {
         mergeAnimation(
           this.cardContainer,
@@ -119,7 +125,13 @@ export default class MainContainer extends Component {
           this.nameCard.container,
           this.tagCard.container,
           () => {
-            this.headCard.triggerMask();
+            this.headCard.triggerResultProfile({
+              name: nameInput.value,
+              tags: tagInput.tags.map((aTagBlock) => {
+                aTagBlock.toggleCloseButton();
+                return aTagBlock;
+              }),
+            });
           }
         );
       });

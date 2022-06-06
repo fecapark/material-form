@@ -157,7 +157,6 @@ function packAnimation(
   nameCard: HTMLElement,
   tagCard: HTMLElement
 ): Array<AnimationSequence.Custom> {
-  const cardOriginHeight: number = 135;
   const hoverMargin: number = 20;
   const changeCardPositionsToAbsolute = () => {
     cardContainer.style.display = "";
@@ -167,9 +166,7 @@ function packAnimation(
     headCard.style.position = "absolute";
     headCard.style.top = "";
     headCard.style.transform = `translate3d(0, ${
-      -headCard.getBoundingClientRect().height / 2 -
-      cardOriginHeight -
-      hoverMargin
+      (-headCard.getBoundingClientRect().height * 3) / 2 - hoverMargin
     }px, 0)`;
 
     nameCard.style.position = "absolute";
@@ -180,12 +177,8 @@ function packAnimation(
     tagCard.style.position = "absolute";
     tagCard.style.top = "";
     tagCard.style.transform = `translate3d(0, ${
-      -tagCard.getBoundingClientRect().height / 2 +
-      cardOriginHeight +
-      hoverMargin
+      tagCard.getBoundingClientRect().height / 2 + hoverMargin
     }px, 0)`;
-
-    console.log(tagCard.getBoundingClientRect().height);
   };
 
   return [
@@ -210,7 +203,7 @@ function packAnimation(
             prop: "transform",
             fvalue: "translate3d(0, %xpx, 0)",
             from: () => [],
-            to: () => [-cardOriginHeight / 2],
+            to: () => [-tagCard.getBoundingClientRect().height / 2],
           },
         ],
         duration: 0.35,
@@ -240,7 +233,7 @@ function packAnimation(
             prop: "transform",
             fvalue: "translate3d(0, %xpx, 0)",
             from: () => [],
-            to: () => [-cardOriginHeight / 2],
+            to: () => [-headCard.getBoundingClientRect().height / 2],
           },
         ],
         duration: 0.35,

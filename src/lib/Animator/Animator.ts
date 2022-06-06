@@ -11,6 +11,8 @@ const BEZIER_EASING_MAP: Record<string, BezierValue> = {
 
 export default class Animator {
   private data: AnimationData.Parsed;
+  private preFromValues: Array<Array<number>> = [];
+  private preToValues: Array<Array<number>> = [];
   private animator: AnimatorClosure = null;
 
   constructor(
@@ -91,15 +93,14 @@ export default class Animator {
   }
 
   private getCurrentValuesAsRatio(
-    fromValues: Array<number>,
-    toValues: Array<number>,
+    valueIndex: number,
     ratio: number
   ): Array<number> {
     const result: Array<number> = [];
 
-    for (let i = 0; i < fromValues.length; i++) {
-      const aFrom = fromValues[i];
-      const aTo = toValues[i];
+    for (let i = 0; i < this.preFromValues[valueIndex].length; i++) {
+      const aFrom = this.preFromValues[valueIndex][i];
+      const aTo = this.preToValues[valueIndex][i];
 
       result.push(aFrom + (aTo - aFrom) * ratio);
     }
@@ -110,14 +111,12 @@ export default class Animator {
   private animate(ratio: number) {
     const animateStyles: Array<AnimationData.StyleData> = this.data.styles;
 
-    animateStyles.forEach((aAnimateStyle) => {
-      const { prop, fvalue, from, to }: AnimationData.StyleData = aAnimateStyle;
-      const fromValues: Array<number> = from();
-      const toValues: Array<number> = to();
+    animateStyles.forEach((aAnimateStyle, index) => {
+      const { prop, fvalue }: AnimationData.StyleData = aAnimateStyle;
 
       const animatedValue: string = this.parseFormatedStyleString(
         fvalue,
-        this.getCurrentValuesAsRatio(fromValues, toValues, ratio)
+        this.getCurrentValuesAsRatio(index, ratio)
       );
 
       this.data.target.style.setProperty(prop, animatedValue);
@@ -154,6 +153,15 @@ export default class Animator {
     return splited.join("");
   }
 
+  private preCalculateValues() {
+    this.data.styles.forEach((aStyleData) => {
+      const { from, to }: AnimationData.StyleData = aStyleData;
+
+      this.preFromValues.push(from());
+      this.preToValues.push(to());
+    });
+  }
+
   public play() {
     const { onStart, target }: AnimationData.Parsed = this.data;
     this.animator = this.animator ?? this.getAnimator();
@@ -161,6 +169,7 @@ export default class Animator {
     setTimeout(() => {
       requestAnimationFrame(() => {
         onStart({ target });
+        this.preCalculateValues();
         this.runAnimationFrame();
       });
     }, this.data.delay * 1000);
