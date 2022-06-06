@@ -9,8 +9,8 @@ const animationFixtures: Array<AnimationData.Custom> = [
       {
         prop: "transform",
         fvalue: "translate3d(%xpx, 0, 0)",
-        from: [100],
-        to: [200],
+        from: () => [100],
+        to: () => [200],
       },
     ],
     duration: 0,
@@ -21,8 +21,8 @@ const animationFixtures: Array<AnimationData.Custom> = [
       {
         prop: "transform",
         fvalue: "translate3d(%xpx, 0, 0)",
-        from: [200],
-        to: [300],
+        from: () => [200],
+        to: () => [300],
       },
     ],
     duration: 0,
@@ -33,8 +33,8 @@ const animationFixtures: Array<AnimationData.Custom> = [
       {
         prop: "opacity",
         fvalue: "%x",
-        from: [0.3],
-        to: [1],
+        from: () => [0.3],
+        to: () => [1],
       },
     ],
     duration: 1,

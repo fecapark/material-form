@@ -7,7 +7,6 @@ import TagInput from "../Inputs/TagInput/TagInput";
 import CircleButton from "../Buttons/CircleButton/CircleButton";
 import { executeAnimation as splitAnimation } from "../Cards/InfoCardSplit.ani";
 import { executeAnimation as mergeAnimation } from "../Cards/InfoCardMerge.ani";
-import TagBlock from "../Tag/TagBlock/TagBlock";
 
 export default class MainContainer extends Component {
   private readonly TITLE_CONTAINER_SELECTOR: string = ".card-title-container";
