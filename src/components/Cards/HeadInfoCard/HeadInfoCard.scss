@@ -34,9 +34,9 @@
       align-items: center;
       align-self: flex-start;
       opacity: 0;
+      cursor: pointer;
 
       i {
-        cursor: pointer;
         font-size: 14px;
         color: $secondary-text-color;
       }

@@ -40,7 +40,7 @@ function getMaskAnimation(
   // Animation parameters
   const duration = 0.35;
   const deafultDelay = 0.6;
-  const delayGap = 0.18;
+  const delayGap = 0.125;
   const bezier: BezierValue = [0, 0, 0.2, 1];
 
   return [
