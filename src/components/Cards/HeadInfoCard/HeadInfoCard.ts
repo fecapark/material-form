@@ -40,7 +40,9 @@ export default class HeadInfoCard extends Component {
         <div class="sub-mask">
           <div class="result-profile-container">
             <div class="i-mask"></div>
-            <i class="fa-solid fa-chevron-left"></i>
+            <div class="back-button-wrapper">
+              <i class="fa-solid fa-chevron-left"></i>
+            </div>
             <div class="info-name-container">
               <span class="info-name">환영합니다, ${
                 this.resultProfileData.name
@@ -69,8 +71,10 @@ export default class HeadInfoCard extends Component {
           .map((aTagBlock) => aTagBlock.container)
       );
 
-      const backButton = this.qs(".fa-chevron-left")! as HTMLElement;
-      backButton.addEventListener("pointerdown", () => {
+      const backButton = this.qs(".back-button-wrapper")! as HTMLElement;
+      backButton.addEventListener("pointerdown", (e: PointerEvent) => {
+        e.stopPropagation();
+
         requestAnimationFrame(() => {
           backMaskAnimation(
             this.container,

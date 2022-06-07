@@ -112,8 +112,9 @@ function resultProfileAppearMixin(
   const resultProfileContainer: HTMLDivElement = subMask.querySelector(
     ".result-profile-container"
   )!;
-  const backButton: HTMLElement =
-    resultProfileContainer.querySelector(".fa-chevron-left")!;
+  const backButton: HTMLElement = resultProfileContainer.querySelector(
+    ".back-button-wrapper"
+  )!;
   const infoName: HTMLElement =
     resultProfileContainer.querySelector(".info-name")!;
   const infoRemember: HTMLElement =

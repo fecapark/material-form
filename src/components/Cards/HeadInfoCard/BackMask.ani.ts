@@ -12,40 +12,32 @@ function iMaskTriggerAnimation(
   let maskTargetSize: number;
 
   return [
-    [
-      {
-        target: iMask,
-        styles: [
-          {
-            prop: "width",
-            fvalue: "%xpx",
-            from: () => [0],
-            to: () => [maskTargetSize],
-          },
-        ],
-        duration: 0.5,
-        bezier: "material-normal",
-        onStart: () => {
-          maskTargetSize = Math.sqrt(
+    {
+      target: iMask,
+      styles: [
+        {
+          prop: "width",
+          fvalue: "%xpx",
+          from: () => [0],
+          to: () => [maskTargetSize],
+        },
+        {
+          prop: "height",
+          fvalue: "%xpx",
+          from: () => [0],
+          to: () => [maskTargetSize],
+        },
+      ],
+      duration: 0.9,
+      bezier: [0.22, 0.68, 0, 1],
+      onStart: () => {
+        maskTargetSize =
+          Math.sqrt(
             Math.pow(headCard.getBoundingClientRect().width * 2, 2) +
               Math.pow(headCard.getBoundingClientRect().height * 2, 2)
-          );
-        },
+          ) * 1.01;
       },
-      {
-        target: iMask,
-        styles: [
-          {
-            prop: "height",
-            fvalue: "%xpx",
-            from: () => [0],
-            to: () => [maskTargetSize],
-          },
-        ],
-        duration: 0.5,
-        bezier: "material-normal",
-      },
-    ],
+    },
   ];
 }
 
@@ -77,7 +69,7 @@ function headCardHeightNormalizeAnimation(
           to: () => getShadowValue(0),
         },
       ],
-      duration: 0.5,
+      duration: 0.4,
       bezier: "material-accel",
     },
   ];
