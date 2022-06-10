@@ -9,11 +9,20 @@ interface ResultProfileData {
   tags: Array<TagBlock>;
 }
 
+interface HandleOptions {
+  reRenderCardContainer: () => void;
+}
+
 export default class HeadInfoCard extends Component {
+  private readonly reRenderCardContainer: () => void;
+  private isBackButtonTriggered: boolean = false;
+  private isResultProfileAnimationEnd: boolean = false;
   private resultProfileData: ResultProfileData = { name: "", tags: [] };
 
-  constructor(private reRenderCardContainer: () => void) {
+  constructor({ reRenderCardContainer }: HandleOptions) {
     super({ classNames: ["info-card", "head"] });
+
+    this.reRenderCardContainer = reRenderCardContainer;
 
     this.store.setDefaultState("resultProfileTriggered", false);
     this.store.setAction("triggerResultProfile", ({ payload }) => {
@@ -24,12 +33,16 @@ export default class HeadInfoCard extends Component {
     this.render();
   }
 
+  public get isResultProfileTriggered(): boolean {
+    return this.store.getState("resultProfileTriggered");
+  }
+
   public triggerResultProfile({ name, tags }: ResultProfileData) {
     this.store.dispatch("triggerResultProfile", { name, tags });
   }
 
   render() {
-    if (!this.store.getState("resultProfileTriggered")) {
+    if (!this.isResultProfileTriggered) {
       this.container.innerHTML = `
         <span class="title-text">반가워요!</span>
         <span class="sub-title-text">사용자님이 누군지 알려주세요.</span>
@@ -40,18 +53,22 @@ export default class HeadInfoCard extends Component {
         <div class="sub-mask">
           <div class="result-profile-container">
             <div class="i-mask"></div>
-            <div class="back-button-wrapper">
-              <i class="fa-solid fa-chevron-left"></i>
+            <div class="top-button-container">
+              <div class="back-button-wrapper">
+                <i class="fa-solid fa-chevron-left"></i>
+              </div>
+              <div class="submit-button-wrapper">
+                <button>
+                  <i class="fa-solid fa-check"></i>
+                </button>
+              </div>
             </div>
             <div class="info-name-container">
-              <span class="info-name">환영합니다, ${
-                this.resultProfileData.name
-              }님.</span>
+              <span class="info-name">환영합니다!</span>
               <span class="info-remember">이제부터 ${
                 this.resultProfileData.name
               }님을 기억할게요.</span>
             </div>
-            <div class="dividor"></div>
             <div class="info-tag-container">
               <div class="tag-block-container"></div>
               <span class="info-tag-text">총 ${
@@ -72,8 +89,13 @@ export default class HeadInfoCard extends Component {
       );
 
       const backButton = this.qs(".back-button-wrapper")! as HTMLElement;
-      backButton.addEventListener("pointerdown", (e: PointerEvent) => {
+      backButton.addEventListener("pointerup", (e: PointerEvent) => {
         e.stopPropagation();
+
+        if (!this.isResultProfileAnimationEnd) return;
+        if (this.isBackButtonTriggered) return;
+
+        this.isBackButtonTriggered = true;
 
         requestAnimationFrame(() => {
           backMaskAnimation(
@@ -88,7 +110,10 @@ export default class HeadInfoCard extends Component {
         resultProfileAnimation(
           this.container,
           this.qs(".dark-mask")!,
-          this.qs(".sub-mask")!
+          this.qs(".sub-mask")!,
+          () => {
+            this.isResultProfileAnimationEnd = true;
+          }
         );
       });
     }

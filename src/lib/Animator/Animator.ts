@@ -7,7 +7,23 @@ const BEZIER_EASING_MAP: Record<string, BezierValue> = {
   ease: [0.25, 0.1, 0.25, 1],
   "material-normal": [0.4, 0, 0.2, 1],
   "material-accel": [0, 0, 0.2, 1],
+  "super-accel": [0.22, 0.68, 0, 1],
 };
+
+export function getDummyAnimationData(delay: number): AnimationData.Custom {
+  return {
+    target: document.createElement("div"),
+    styles: [
+      {
+        prop: "opacity",
+        fvalue: "%x",
+        from: () => [0],
+        to: () => [0],
+      },
+    ],
+    duration: delay,
+  };
+}
 
 export default class Animator {
   private data: AnimationData.Parsed;
@@ -26,7 +42,6 @@ export default class Animator {
   private parseData(customData: AnimationData.Custom): AnimationData.Parsed {
     function checkDataFormat(data: AnimationData.Parsed) {
       data.styles.forEach((aStyleData) => {
-        console.log();
         const { fvalue, from, to }: AnimationData.StyleData = aStyleData;
         const fromValues: Array<number> = from();
         const toValues: Array<number> = to();

@@ -5,6 +5,19 @@ import {
   getShadowValue,
 } from "../../../lib/shadow/shadow";
 
+function getTopMarginForNameInfo(headCard: HTMLElement): number {
+  const infoNameContainer: HTMLElement = headCard.querySelector(
+    ".info-name-container"
+  )!;
+
+  const hcBRect: DOMRect = headCard.getBoundingClientRect();
+  const incBRect: DOMRect = infoNameContainer.getBoundingClientRect();
+
+  const resultMargin: number = (hcBRect.height - incBRect.height) / 2;
+
+  return resultMargin;
+}
+
 function unHoverAndTriggerMaskAndResultApperAnimation(
   headCard: HTMLElement,
   darkMask: HTMLElement,
@@ -115,6 +128,9 @@ function resultProfileAppearMixin(
   const backButton: HTMLElement = resultProfileContainer.querySelector(
     ".back-button-wrapper"
   )!;
+  const infoNameContainer: HTMLElement = resultProfileContainer.querySelector(
+    ".info-name-container"
+  )!;
   const infoName: HTMLElement =
     resultProfileContainer.querySelector(".info-name")!;
   const infoRemember: HTMLElement =
@@ -160,6 +176,13 @@ function resultProfileAppearMixin(
       duration: 0.45,
       delay: 0.75,
       bezier: "material-normal",
+      onStart: () => {
+        const margin: number = getTopMarginForNameInfo(headCard);
+
+        infoNameContainer.style.marginTop = `${margin}px`;
+        infoNameContainer.style.marginBottom = `${(margin * 3) / 5}px`;
+        resultProfileContainer.style.justifyContent = "flex-start";
+      },
     },
     {
       target: infoRemember,
@@ -190,11 +213,14 @@ function resultProfileAppearMixin(
 function appearTagInfoAnimation(
   headCard: HTMLElement
 ): Array<AnimationSequence.Custom> {
-  const dividor: HTMLElement = headCard.querySelector(
-    ".result-profile-container > .dividor"
+  const infoNameContainer: HTMLElement = headCard.querySelector(
+    ".info-name-container"
   )!;
   const infoTagContainer: HTMLElement = headCard.querySelector(
     ".result-profile-container > .info-tag-container"
+  )!;
+  const submitButton: HTMLElement = headCard.querySelector(
+    ".submit-button-wrapper > button"
   )!;
 
   return [
@@ -207,10 +233,23 @@ function appearTagInfoAnimation(
             fvalue: "%xpx",
             from: () => [headCard.getBoundingClientRect().height],
             to: () => {
+              const incBRect: DOMRect =
+                infoNameContainer.getBoundingClientRect();
+              const itcBRect: DOMRect =
+                infoTagContainer.getBoundingClientRect();
+              const incMarginTop: number = parseFloat(
+                infoNameContainer.style.marginTop.replace("px", "")
+              );
+              const incMarginBottom: number = parseFloat(
+                infoNameContainer.style.marginBottom.replace("px", "")
+              );
+
               return [
-                headCard.getBoundingClientRect().height +
-                  infoTagContainer.getBoundingClientRect().height +
-                  40,
+                incMarginTop +
+                  incBRect.height +
+                  incMarginBottom +
+                  itcBRect.height +
+                  incMarginBottom,
               ];
             },
           },
@@ -218,20 +257,6 @@ function appearTagInfoAnimation(
         duration: 0.35,
         delay: 0.3,
         bezier: "material-normal",
-      },
-      {
-        target: dividor,
-        styles: [
-          {
-            prop: "opacity",
-            fvalue: "%x",
-            from: () => [0],
-            to: () => [1],
-          },
-        ],
-        duration: 0.35,
-        bezier: "material-normal",
-        delay: 0.5,
       },
       {
         target: infoTagContainer.querySelector(".tag-block-container")!,
@@ -250,8 +275,11 @@ function appearTagInfoAnimation(
           },
         ],
         duration: 0.45,
-        delay: 0.55,
+        delay: 0.6,
         bezier: "material-normal",
+        onStart: () => {
+          infoTagContainer.style.visibility = "visible";
+        },
       },
       {
         target: infoTagContainer.querySelector(".info-tag-text")!,
@@ -270,24 +298,59 @@ function appearTagInfoAnimation(
           },
         ],
         duration: 0.45,
-        delay: 0.68,
+        delay: 0.7,
         bezier: "material-normal",
       },
     ],
+    {
+      target: submitButton,
+      styles: [
+        {
+          prop: "width",
+          fvalue: "%x%",
+          from: () => [0],
+          to: () => [100],
+        },
+        {
+          prop: "height",
+          fvalue: "%x%",
+          from: () => [0],
+          to: () => [100],
+        },
+        {
+          prop: "box-shadow",
+          fvalue: getShadowFormatValue(),
+          from: () => getShadowValue(0),
+          to: () => getShadowValue(2),
+        },
+      ],
+      duration: 0.45,
+      delay: 0.3,
+      bezier: "super-accel",
+      onStart: () => {
+        headCard.style.overflow = "visible";
+      },
+    },
   ];
 }
 
 export function executeAnimation(
   headCard: HTMLElement,
   darkMask: HTMLElement,
-  subMask: HTMLElement
+  subMask: HTMLElement,
+  onEnd: () => void = () => {}
 ) {
-  new SequenceAnimator([
-    ...unHoverAndTriggerMaskAndResultApperAnimation(
-      headCard,
-      darkMask,
-      subMask
-    ),
-    ...appearTagInfoAnimation(headCard),
-  ]).play();
+  new SequenceAnimator(
+    [
+      ...unHoverAndTriggerMaskAndResultApperAnimation(
+        headCard,
+        darkMask,
+        subMask
+      ),
+      ...appearTagInfoAnimation(headCard),
+    ],
+    () => {
+      onEnd();
+    }
+  ).play();
 }

@@ -36,15 +36,15 @@ export default class MainContainer extends Component {
       ".circle-button"
     )! as HTMLButtonElement;
 
-    if (this.nameInfoValid && this.tagInfoValid) {
+    if (this.nameInfoValid && this.tagInfoValid)
       button.classList.remove("hidden");
-    } else {
-      button.classList.add("hidden");
-    }
+    else button.classList.add("hidden");
   }
 
   private renderHeadCard(): HeadInfoCard {
-    return new HeadInfoCard(this.render.bind(this));
+    return new HeadInfoCard({
+      reRenderCardContainer: this.render.bind(this),
+    });
   }
 
   private renderNameCard(): InfoCard {
@@ -120,6 +120,9 @@ export default class MainContainer extends Component {
           this.nameCard!.container,
           this.tagCard!.container,
           () => {
+            this.nameCard!.container.remove();
+            this.tagCard!.container.remove();
+
             this.headCard!.triggerResultProfile({
               name: nameInput.value,
               tags: tagInput.tags.map((aTagBlock) => {

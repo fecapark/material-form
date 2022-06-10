@@ -1,4 +1,5 @@
 import { AnimationSequence } from "Animator-Type";
+import { getDummyAnimationData } from "../../lib/Animator/Animator";
 import SequenceAnimator from "../../lib/Animator/SequenceAnimator";
 import { getShadowFormatValue, getShadowValue } from "../../lib/shadow/shadow";
 
@@ -182,19 +183,7 @@ function packAnimation(
   };
 
   return [
-    // Dummy for global delay
-    {
-      target: tagCard,
-      styles: [
-        {
-          prop: "opacity",
-          fvalue: "%x",
-          from: () => [1],
-          to: () => [1],
-        },
-      ],
-      duration: 0.1,
-    },
+    getDummyAnimationData(0.1),
     [
       {
         target: tagCard,

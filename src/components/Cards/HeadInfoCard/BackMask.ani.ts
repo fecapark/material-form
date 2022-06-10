@@ -10,8 +10,42 @@ function iMaskTriggerAnimation(
   iMask: HTMLElement
 ): Array<AnimationSequence.Custom> {
   let maskTargetSize: number;
+  const submitButton: HTMLElement = headCard.querySelector(
+    ".submit-button-wrapper > button"
+  )!;
 
   return [
+    {
+      target: submitButton,
+      styles: [
+        {
+          prop: "width",
+          fvalue: "%x%",
+          from: () => [],
+          to: () => [0],
+        },
+        {
+          prop: "height",
+          fvalue: "%x%",
+          from: () => [],
+          to: () => [0],
+        },
+        {
+          prop: "font-size",
+          fvalue: "%xpx",
+          from: () => [16],
+          to: () => [0],
+        },
+        {
+          prop: "box-shadow",
+          fvalue: getShadowFormatValue(),
+          from: () => [],
+          to: () => getShadowValue(0),
+        },
+      ],
+      duration: 0.3,
+      bezier: "material-accel",
+    },
     {
       target: iMask,
       styles: [
@@ -28,9 +62,10 @@ function iMaskTriggerAnimation(
           to: () => [maskTargetSize],
         },
       ],
-      duration: 0.9,
-      bezier: [0.22, 0.68, 0, 1],
+      duration: 1,
+      bezier: "super-accel",
       onStart: () => {
+        headCard.style.overflow = "hidden";
         maskTargetSize =
           Math.sqrt(
             Math.pow(headCard.getBoundingClientRect().width * 2, 2) +
