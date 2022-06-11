@@ -9,19 +9,6 @@ function getHeadCardTextFadeInAnimation(
   return [
     [
       {
-        target: headCard,
-        styles: [
-          {
-            prop: "box-shadow",
-            fvalue: getShadowFormatValue(),
-            from: () => getShadowValue(0),
-            to: () => getShadowValue(2),
-          },
-        ],
-        duration: 0.35,
-        bezier: "material-normal",
-      },
-      {
         target: headCard.querySelector(".title-text")!,
         styles: [
           {
@@ -67,7 +54,7 @@ function getHoverSplitAnimation(
         {
           prop: "box-shadow",
           fvalue: getShadowFormatValue(),
-          from: () => [],
+          from: () => getShadowValue(0),
           to: () => getShadowValue(5),
         },
       ],
