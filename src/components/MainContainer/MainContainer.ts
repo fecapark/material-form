@@ -13,10 +13,10 @@ export default class MainContainer extends Component {
   private readonly TITLE_SELECTOR: string = `${this.TITLE_CONTAINER_SELECTOR} > .title`;
   private readonly SUB_TITLE_SELECTOR: string = `${this.TITLE_CONTAINER_SELECTOR} > .sub-title`;
 
-  private headCard: HeadInfoCard | null = null;
-  private nameCard: InfoCard | null = null;
-  private tagCard: InfoCard | null = null;
-  private button: CircleButton | null = null;
+  private headCard?: HeadInfoCard;
+  private nameCard?: InfoCard;
+  private tagCard?: InfoCard;
+  private button?: CircleButton;
 
   private nameInfoValid: boolean = false;
   private tagInfoValid: boolean = false;
@@ -126,6 +126,7 @@ export default class MainContainer extends Component {
           () => {
             this.nameCard!.container.remove();
             this.tagCard!.container.remove();
+            this.button!.container.remove();
 
             this.headCard!.triggerResultProfile({
               name: nameInput.value,

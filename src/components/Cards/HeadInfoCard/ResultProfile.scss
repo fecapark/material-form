@@ -65,10 +65,12 @@
         align-items: center;
 
         .circle-button {
+          position: relative;
           width: 0;
           height: 0;
 
           background-color: $secondary-color;
+          overflow: hidden;
 
           i {
             color: white;

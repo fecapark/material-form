@@ -90,7 +90,7 @@ export default class HeadInfoCard extends Component {
         ".submit-button-wrapper",
         new CircleButton(
           () => {
-            alert("wow!");
+            // Go!
           },
           {
             content: '<i class="fa-solid fa-check"></i>',

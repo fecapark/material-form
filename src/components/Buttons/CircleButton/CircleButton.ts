@@ -79,14 +79,18 @@ export default class CircleButton extends Component {
   }
 
   renderRipple(e: PointerEvent) {
+    e.stopPropagation();
+
     this.removeRipple();
+
+    console.log("fuck");
 
     this.ripple = document.createElement("div");
     this.ripple.classList.add("ripple");
 
     const bRect: DOMRect = this.container.getBoundingClientRect();
-    this.ripple.style.top = `${e.clientY - bRect.top}px`;
-    this.ripple.style.left = `${e.clientX - bRect.left}px`;
+    this.ripple.style.top = `${e.clientY - bRect.y}px`;
+    this.ripple.style.left = `${e.clientX - bRect.x}px`;
 
     this.appendElementsTo("", this.ripple);
   }
@@ -111,12 +115,12 @@ export default class CircleButton extends Component {
     this.container.innerHTML = this.content;
 
     this.container.addEventListener(
-      "pointerdown",
-      this.renderRipple.bind(this)
-    );
-    this.container.addEventListener(
       "pointerup",
       this.handleButtonEvent.bind(this)
+    );
+    this.container.addEventListener(
+      "pointerdown",
+      this.renderRipple.bind(this)
     );
   }
 }
