@@ -32,13 +32,17 @@ export default class MainContainer extends Component {
   }
 
   private checkAndToggleButton() {
-    const button: HTMLButtonElement = this.qs(
-      ".circle-button"
-    )! as HTMLButtonElement;
+    const isHiddenNow = (): boolean => {
+      return this.button!.container.classList.contains("hidden");
+    };
 
-    if (this.nameInfoValid && this.tagInfoValid)
-      button.classList.remove("hidden");
-    else button.classList.add("hidden");
+    if (!this.button) return;
+
+    if (this.nameInfoValid && this.tagInfoValid) {
+      if (isHiddenNow()) this.button.toggleHidden();
+    } else if (!isHiddenNow()) {
+      this.button.toggleHidden();
+    }
   }
 
   private renderHeadCard(): HeadInfoCard {
@@ -106,7 +110,7 @@ export default class MainContainer extends Component {
   private renderButton(): CircleButton {
     const onButtonTrigger = () => {
       document.getElementById("app")!.scrollTo({ top: 0, behavior: "smooth" });
-      button.container.classList.add("hidden");
+      button.toggleHidden();
     };
 
     const executeMergeAnimation = () => {
@@ -141,8 +145,14 @@ export default class MainContainer extends Component {
         executeMergeAnimation();
       },
       {
+        content: '<i class="fa-solid fa-arrow-right"></i>',
         shadowLevel: 3,
         hiddenAtStart: true,
+        style: {
+          width: "3.6em",
+          height: "3.6em",
+          fontSize: "20px",
+        },
       }
     );
 

@@ -220,7 +220,7 @@ function appearTagInfoAnimation(
     ".result-profile-container > .info-tag-container"
   )!;
   const submitButton: HTMLElement = headCard.querySelector(
-    ".submit-button-wrapper > button"
+    ".submit-button-wrapper > .circle-button"
   )!;
 
   return [
@@ -318,6 +318,12 @@ function appearTagInfoAnimation(
           to: () => [100],
         },
         {
+          prop: "font-size",
+          fvalue: "%xpx",
+          from: () => [0],
+          to: () => [16],
+        },
+        {
           prop: "box-shadow",
           fvalue: getShadowFormatValue(),
           from: () => getShadowValue(0),
@@ -327,7 +333,9 @@ function appearTagInfoAnimation(
       duration: 0.45,
       delay: 0.3,
       bezier: "super-accel",
-      onStart: () => {
+      onStart: ({ target }) => {
+        target.classList.remove("hidden");
+        target.style.transition = "none";
         headCard.style.overflow = "visible";
       },
     },

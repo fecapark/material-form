@@ -3,6 +3,7 @@ import Component from "../../../core/Component/Component";
 import { executeAnimation as resultProfileAnimation } from "./ResultProfileTrigger.ani";
 import { executeAnimation as backMaskAnimation } from "./BackMask.ani";
 import TagBlock from "../../Tag/TagBlock/TagBlock";
+import CircleButton from "../../Buttons/CircleButton/CircleButton";
 
 interface ResultProfileData {
   name: string;
@@ -58,9 +59,6 @@ export default class HeadInfoCard extends Component {
                 <i class="fa-solid fa-chevron-left"></i>
               </div>
               <div class="submit-button-wrapper">
-                <button>
-                  <i class="fa-solid fa-check"></i>
-                </button>
               </div>
             </div>
             <div class="info-name-container">
@@ -86,6 +84,20 @@ export default class HeadInfoCard extends Component {
         ...this.resultProfileData.tags
           .reverse()
           .map((aTagBlock) => aTagBlock.container)
+      );
+
+      this.appendElementsTo(
+        ".submit-button-wrapper",
+        new CircleButton(
+          () => {
+            alert("wow!");
+          },
+          {
+            content: '<i class="fa-solid fa-check"></i>',
+            shadowLevel: 2,
+            hiddenAtStart: true,
+          }
+        ).container
       );
 
       const backButton = this.qs(".back-button-wrapper")! as HTMLElement;

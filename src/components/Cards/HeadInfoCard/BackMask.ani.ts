@@ -33,7 +33,7 @@ function iMaskTriggerAnimation(
         {
           prop: "font-size",
           fvalue: "%xpx",
-          from: () => [16],
+          from: () => [],
           to: () => [0],
         },
         {
