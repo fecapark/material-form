@@ -83,4 +83,7 @@ class RouterComponent extends Component {
 
 ## Todo
 
-4. Component render 단위에서 애니메이션 처리가 가능한 프레임워크 제작
+1. main-page 라우팅 처리
+2. local storage 연결
+3. headcard fadeout 애니메이션 만들기
+4. main page 디자인 구상해보기

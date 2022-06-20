@@ -1,20 +1,20 @@
 import "./App.scss";
 import { ROUTES } from "./core/Router/routes";
-import InitialLogo from "./components/InitialLogo/InitialLogo";
-import Component from "./core/Component/Component";
-import MainContainer from "./components/MainContainer/MainContainer";
 import Router from "./core/Router/Router";
+import Component from "./core/Component/Component";
+import InitialLogo from "./components/InitialLogo/InitialLogo";
+import MainContainer from "./components/MainContainer/MainContainer";
+import LocalStorageManager from "./core/LocalStorage/localStorageManager";
 
 export default class App extends Component {
-  appRendered: boolean = false;
-  initialLogo!: InitialLogo;
-  mainContainer!: MainContainer;
+  private appRendered: boolean = false;
+  private initialLogo!: InitialLogo;
+  private mainContainer!: MainContainer;
 
   constructor() {
     super({ id: "app" });
 
     // States
-    this.store.setDefaultState("logined", false);
     this.store.setDefaultState("logoEnd", false);
     this.store.setAction("setLogoEnd", ({ state }) => {
       return { logoEnd: !state["logoEnd"] };
@@ -25,20 +25,34 @@ export default class App extends Component {
     ROUTES.setInitialRootPath();
     new Router(document.createElement("a")); // Initialize router events
 
+    this.initializeLocalStorage();
     this.render();
   }
 
-  setViews() {
+  private initializeLocalStorage() {
+    const setDefault = (key: string, value: any) => {
+      try {
+        LocalStorageManager.get(key);
+      } catch (e) {
+        LocalStorageManager.set(key, value);
+      }
+    };
+
+    setDefault("logined", false);
+  }
+
+  private setViews() {
     ROUTES.setViewTo("#", this.renderHome.bind(this), this.container);
     ROUTES.setViewTo("#logo", this.renderLogo.bind(this), this.container);
     ROUTES.setViewTo("#signin", this.renderSignIn.bind(this), this.container);
+    ROUTES.setViewTo("#main", this.renderDummyMain.bind(this), this.container);
   }
 
-  renderHome() {
+  private renderHome() {
     ROUTES.viewWithRedirect("#logo");
   }
 
-  renderLogo() {
+  private renderLogo() {
     this.initialLogo = new InitialLogo(() => {
       this.store.dispatch("setLogoEnd", {});
     });
@@ -46,9 +60,28 @@ export default class App extends Component {
     this.container.appendChild(this.initialLogo.container);
   }
 
-  renderSignIn() {
-    this.mainContainer = new MainContainer();
+  private renderSignIn() {
+    if (LocalStorageManager.get("logined").parsed) {
+      ROUTES.viewWithRedirect("#");
+      return;
+    }
+
+    this.mainContainer = new MainContainer(this.store);
     this.container.appendChild(this.mainContainer.container);
+  }
+
+  private renderDummyMain() {
+    this.container.innerHTML = `
+      <div>You logined!</div>
+      <div>
+        <button>Logout</button>
+      </div>
+    `;
+
+    this.qs("button")!.addEventListener("pointerup", () => {
+      LocalStorageManager.set("logined", false);
+      ROUTES.viewWithRedirect("#signin");
+    });
   }
 
   render() {
@@ -61,14 +94,9 @@ export default class App extends Component {
       return;
     }
 
-    // When re-rendered before logo animation ends.
-    // if (!this.store.getState("logoEnd")) {
-    //   throw Error("Un expected state change.");
-    // }
-
     // Branch routes for user logined before or else.
-    if (this.store.getState("logined")) {
-      this.container.innerHTML = "Welcome! You logined!";
+    if (LocalStorageManager.get("logined").parsed) {
+      ROUTES.viewWithRedirect("#main");
     } else {
       ROUTES.viewWithRedirect("#signin");
     }

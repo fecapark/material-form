@@ -1,10 +1,4 @@
 declare module "Store-Type" {
-  export namespace PubSub {
-    type EventDetials = Record<string, any>;
-    type EventHandler = (details: EventDetials) => any;
-    type Events = Record<string, Array<EventHandler>>;
-  }
-
   export namespace Store {
     type State = Record<string, any>;
     type Payload = Record<string, any>;
@@ -16,5 +10,14 @@ declare module "Store-Type" {
       state: State;
       payload: Payload;
     }) => State;
+
+    interface AbstractStore {
+      eventManager: import("PubSub-Type").PubSub.AbstractPubSub;
+
+      setDefaultState(accessKey: string, defaultValue: any): void;
+      setAction(actionType: string, action: StoreType.Action): void;
+      dispatch(actionType: string, payload: StoreType.Payload): void;
+      getState(accessKey: string): any;
+    }
   }
 }

@@ -2,11 +2,11 @@ import PublishSubscribe from "./PublishSubscribe";
 import { Store as StoreType } from "Store-Type";
 
 export default class Store {
-  preventPublish: boolean = false;
-
-  actions: Record<string, StoreType.PayloadFunction<StoreType.State>>;
-  eventManager: PublishSubscribe;
+  private preventPublish: boolean = false;
+  private actions: Record<string, StoreType.PayloadFunction<StoreType.State>>;
   private state: StoreType.State;
+
+  readonly eventManager: PublishSubscribe;
 
   constructor() {
     this.actions = {};
@@ -16,7 +16,7 @@ export default class Store {
     this.setStateProxy();
   }
 
-  setStateProxy() {
+  private setStateProxy() {
     const setStateHandler = (
       state: StoreType.State,
       key: string,
@@ -32,6 +32,10 @@ export default class Store {
     };
 
     this.state = new Proxy({}, { set: setStateHandler });
+  }
+
+  private mergeState(state: StoreType.State): StoreType.State {
+    return Object.assign(this.state, state);
   }
 
   setDefaultState(accessKey: string, defaultValue: any) {
@@ -60,10 +64,6 @@ export default class Store {
 
     // Triggers Proxy
     this.state = this.actions[actionType](payload);
-  }
-
-  mergeState(state: StoreType.State): StoreType.State {
-    return Object.assign(this.state, state);
   }
 
   getState(accessKey: string): any {

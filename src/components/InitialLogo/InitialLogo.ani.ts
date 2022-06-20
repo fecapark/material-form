@@ -34,10 +34,7 @@ function getMaskAnimation(
     return masks[idx].getBoundingClientRect();
   }
 
-  // Sizes
   const resultSize = { width: 300, height: 135 };
-
-  // Animation parameters
   const duration = 0.35;
   const deafultDelay = 0.6;
   const delayGap = 0.125;

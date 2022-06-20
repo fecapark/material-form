@@ -1,9 +1,11 @@
 import "./HeadInfoCard.scss";
 import Component from "../../../core/Component/Component";
-import { executeAnimation as resultProfileAnimation } from "./ResultProfileTrigger.ani";
-import { executeAnimation as backMaskAnimation } from "./BackMask.ani";
 import TagBlock from "../../Tag/TagBlock/TagBlock";
 import CircleButton from "../../Buttons/CircleButton/CircleButton";
+import { executeAnimation as resultProfileAnimation } from "./ResultProfileTrigger.ani";
+import { executeAnimation as backMaskAnimation } from "./BackMask.ani";
+import { Store } from "Store-Type";
+import LocalStorageManager from "../../../core/LocalStorage/localStorageManager";
 
 interface ResultProfileData {
   name: string;
@@ -20,7 +22,10 @@ export default class HeadInfoCard extends Component {
   private isResultProfileAnimationEnd: boolean = false;
   private resultProfileData: ResultProfileData = { name: "", tags: [] };
 
-  constructor({ reRenderCardContainer }: HandleOptions) {
+  constructor(
+    private readonly globalStore: Store.AbstractStore,
+    { reRenderCardContainer }: HandleOptions
+  ) {
     super({ classNames: ["info-card", "head"] });
 
     this.reRenderCardContainer = reRenderCardContainer;
@@ -40,6 +45,29 @@ export default class HeadInfoCard extends Component {
 
   public triggerResultProfile({ name, tags }: ResultProfileData) {
     this.store.dispatch("triggerResultProfile", { name, tags });
+  }
+
+  private submit() {
+    // console.log(this.globalStore.getState("logined"));
+    LocalStorageManager.set("logined", true);
+    // console.log(LocalStorageManager.get("logined"));
+  }
+
+  private handleBackButton(e: PointerEvent) {
+    e.stopPropagation();
+
+    if (!this.isResultProfileAnimationEnd) return;
+    if (this.isBackButtonTriggered) return;
+
+    this.isBackButtonTriggered = true;
+
+    requestAnimationFrame(() => {
+      backMaskAnimation(
+        this.container,
+        this.qs(".i-mask")!,
+        this.reRenderCardContainer
+      );
+    });
   }
 
   render() {
@@ -88,35 +116,17 @@ export default class HeadInfoCard extends Component {
 
       this.appendElementsTo(
         ".submit-button-wrapper",
-        new CircleButton(
-          () => {
-            // Go!
-          },
-          {
-            content: '<i class="fa-solid fa-check"></i>',
-            shadowLevel: 2,
-            hiddenAtStart: true,
-          }
-        ).container
+        new CircleButton(this.submit.bind(this), {
+          content: '<i class="fa-solid fa-check"></i>',
+          shadowLevel: 2,
+          hiddenAtStart: true,
+        }).container
       );
 
-      const backButton = this.qs(".back-button-wrapper")! as HTMLElement;
-      backButton.addEventListener("pointerup", (e: PointerEvent) => {
-        e.stopPropagation();
-
-        if (!this.isResultProfileAnimationEnd) return;
-        if (this.isBackButtonTriggered) return;
-
-        this.isBackButtonTriggered = true;
-
-        requestAnimationFrame(() => {
-          backMaskAnimation(
-            this.container,
-            this.qs(".i-mask")!,
-            this.reRenderCardContainer
-          );
-        });
-      });
+      this.qs(".back-button-wrapper")!.addEventListener(
+        "pointerup",
+        this.handleBackButton.bind(this) as EventListener
+      );
 
       requestAnimationFrame(() => {
         resultProfileAnimation(

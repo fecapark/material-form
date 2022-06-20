@@ -1,6 +1,6 @@
-import { PubSub } from "Store-Type";
+import { PubSub } from "PubSub-Type";
 
-export default class PublishSubscribe {
+export default class PublishSubscribe implements PubSub.AbstractPubSub {
   private events: PubSub.Events = {};
 
   subscribe(eventType: string, callBack: PubSub.EventHandler): number {

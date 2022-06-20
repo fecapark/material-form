@@ -1,12 +1,13 @@
 import "./MainContainer.scss";
 import Component from "../../core/Component/Component";
-import HeadInfoCard from "../Cards/HeadInfoCard/HeadInfoCard";
-import InfoCard from "../Cards/InfoCard/InfoCard";
+import CircleButton from "../Buttons/CircleButton/CircleButton";
 import TextInput from "../Inputs/TextInput/TextInput";
 import TagInput from "../Inputs/TagInput/TagInput";
-import CircleButton from "../Buttons/CircleButton/CircleButton";
+import HeadInfoCard from "../Cards/HeadInfoCard/HeadInfoCard";
+import InfoCard from "../Cards/InfoCard/InfoCard";
 import { executeAnimation as splitAnimation } from "../Cards/InfoCardSplit.ani";
 import { executeAnimation as mergeAnimation } from "../Cards/InfoCardMerge.ani";
+import { Store } from "Store-Type";
 
 export default class MainContainer extends Component {
   private readonly TITLE_CONTAINER_SELECTOR: string = ".card-title-container";
@@ -21,7 +22,7 @@ export default class MainContainer extends Component {
   private nameInfoValid: boolean = false;
   private tagInfoValid: boolean = false;
 
-  constructor() {
+  constructor(private readonly globalStore: Store.AbstractStore) {
     super({ id: "main-container" });
 
     this.render();
@@ -46,7 +47,7 @@ export default class MainContainer extends Component {
   }
 
   private renderHeadCard(): HeadInfoCard {
-    return new HeadInfoCard({
+    return new HeadInfoCard(this.globalStore, {
       reRenderCardContainer: this.render.bind(this),
     });
   }

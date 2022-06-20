@@ -23,6 +23,10 @@ export class ROUTES {
       name: "signin",
       view: defaultView,
     },
+    "#main": {
+      name: "main",
+      view: defaultView,
+    },
   };
 
   static setViewTo(

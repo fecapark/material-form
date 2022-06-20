@@ -83,8 +83,6 @@ export default class CircleButton extends Component {
 
     this.removeRipple();
 
-    console.log("fuck");
-
     this.ripple = document.createElement("div");
     this.ripple.classList.add("ripple");
 
