@@ -1,13 +1,13 @@
-import "./MainContainer.scss";
+import { Store } from "Store-Type";
 import Component from "../../core/Component/Component";
 import CircleButton from "../Buttons/CircleButton/CircleButton";
-import TextInput from "../Inputs/TextInput/TextInput";
-import TagInput from "../Inputs/TagInput/TagInput";
 import HeadInfoCard from "../Cards/HeadInfoCard/HeadInfoCard";
 import InfoCard from "../Cards/InfoCard/InfoCard";
-import { executeAnimation as splitAnimation } from "../Cards/InfoCardSplit.ani";
 import { executeAnimation as mergeAnimation } from "../Cards/InfoCardMerge.ani";
-import { Store } from "Store-Type";
+import { executeAnimation as splitAnimation } from "../Cards/InfoCardSplit.ani";
+import TagInput from "../Inputs/TagInput/TagInput";
+import TextInput from "../Inputs/TextInput/TextInput";
+import "./MainContainer.scss";
 
 export default class MainContainer extends Component {
   private readonly TITLE_CONTAINER_SELECTOR: string = ".card-title-container";
@@ -102,7 +102,7 @@ export default class MainContainer extends Component {
     });
     const tagCard = new InfoCard(tagInput, {
       title: "관심사도 자유롭게 알려주세요!",
-      subTitle: "관심사들을 5개까지 태그로 만들어드릴게요.",
+      subTitle: "총 5개까지 태그로 만들어드릴게요.",
     });
 
     return tagCard;
@@ -141,6 +141,16 @@ export default class MainContainer extends Component {
       });
     };
 
+    const addStickyObserverToButton = () => {
+      const observer = new IntersectionObserver(
+        ([e]) =>
+          e.target.classList.toggle("is-sticky", e.intersectionRatio < 1),
+        { threshold: [1] }
+      );
+
+      observer.observe(button.container);
+    };
+
     const button = new CircleButton(
       () => {
         onButtonTrigger();
@@ -157,6 +167,7 @@ export default class MainContainer extends Component {
         },
       }
     );
+    addStickyObserverToButton();
 
     return button;
   }

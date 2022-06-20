@@ -5,21 +5,33 @@
 
   .card-container {
     position: relative;
-    width: 300px;
+
+    width: 100%;
+    max-width: 300px;
+
     height: 100%;
     margin: 0 auto;
 
     & > .circle-button {
-      // 사지방에서 테스팅 해야함.
-      position: sticky;
+      position: fixed;
       bottom: 2em;
-      margin-top: 2em;
-
-      // sticky 되먼 이거로 하고싶음... 그게 아니면 평소에는 중간에 놓기
-      // align-self: flex-end;
-      align-self: center;
+      right: 2em;
 
       background-color: $secondary-color;
+    }
+  }
+}
+
+@media screen and (max-width: 40em) {
+  #main-container {
+    width: 100%;
+    padding: 0 5px;
+
+    .card-container {
+      & > .circle-button {
+        bottom: 1em;
+        right: 1em;
+      }
     }
   }
 }

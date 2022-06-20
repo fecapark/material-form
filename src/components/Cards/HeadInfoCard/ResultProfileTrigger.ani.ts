@@ -13,6 +13,9 @@ function getTopMarginForNameInfo(headCard: HTMLElement): number {
   const hcBRect: DOMRect = headCard.getBoundingClientRect();
   const incBRect: DOMRect = infoNameContainer.getBoundingClientRect();
 
+  console.log(hcBRect.height, incBRect.height);
+  console.log((hcBRect.height - incBRect.height) / 2);
+
   const resultMargin: number = (hcBRect.height - incBRect.height) / 2;
 
   return resultMargin;
@@ -180,7 +183,7 @@ function resultProfileAppearMixin(
         const margin: number = getTopMarginForNameInfo(headCard);
 
         infoNameContainer.style.marginTop = `${margin}px`;
-        infoNameContainer.style.marginBottom = `${(margin * 3) / 5}px`;
+        infoNameContainer.style.marginBottom = `${margin}px`;
         resultProfileContainer.style.justifyContent = "flex-start";
       },
     },
