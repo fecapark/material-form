@@ -48,7 +48,7 @@ export default class HeadInfoCard extends Component {
   }
 
   private submit() {
-    // console.log(this.globalStore.getState("logined"));
+    console.log(this.globalStore.getState("logined"));
     LocalStorageManager.set("logined", true);
     // console.log(LocalStorageManager.get("logined"));
   }
@@ -73,8 +73,8 @@ export default class HeadInfoCard extends Component {
   render() {
     if (!this.isResultProfileTriggered) {
       this.container.innerHTML = `
-        <span class="title-text">반가워요!</span>
-        <span class="sub-title-text">사용자님이 누군지 알려주세요.</span>
+      <span class="title-text">반가워요.</span>
+      <span class="sub-title-text">우선, 사용자님에 대해 알려주세요.</span>
       `;
     } else {
       this.container.innerHTML = `

@@ -35,7 +35,7 @@ function getHeadCardTextFadeInAnimation(
       ],
       duration: 0.6,
       bezier: "ease",
-      delay: 0.1,
+      delay: 0.15,
     },
   ];
 }
@@ -59,7 +59,7 @@ function getHoverSplitAnimation(
         },
       ],
       duration: 0.3,
-      delay: 0.2,
+      delay: 0.25,
       bezier: "material-normal",
     },
     [

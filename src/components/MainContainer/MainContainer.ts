@@ -73,7 +73,7 @@ export default class MainContainer extends Component {
     });
     const nameCard = new InfoCard(textInput, {
       title: "이름은 무엇인가요?",
-      subTitle: `${MAX_TEXT_LEGNTH}자 이내에서 알려주세요!`,
+      subTitle: `${MAX_TEXT_LEGNTH}자 이내에서 알려주세요.`,
     });
 
     return nameCard;
@@ -101,7 +101,7 @@ export default class MainContainer extends Component {
       },
     });
     const tagCard = new InfoCard(tagInput, {
-      title: "관심사도 자유롭게 알려주세요!",
+      title: "관심사도 자유롭게 알려주세요.",
       subTitle: "총 5개까지 태그로 만들어드릴게요.",
     });
 
@@ -141,16 +141,6 @@ export default class MainContainer extends Component {
       });
     };
 
-    const addStickyObserverToButton = () => {
-      const observer = new IntersectionObserver(
-        ([e]) =>
-          e.target.classList.toggle("is-sticky", e.intersectionRatio < 1),
-        { threshold: [1] }
-      );
-
-      observer.observe(button.container);
-    };
-
     const button = new CircleButton(
       () => {
         onButtonTrigger();
@@ -167,7 +157,6 @@ export default class MainContainer extends Component {
         },
       }
     );
-    addStickyObserverToButton();
 
     return button;
   }

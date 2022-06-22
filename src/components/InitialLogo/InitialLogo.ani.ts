@@ -35,10 +35,15 @@ function getMaskAnimation(
   }
 
   const resultSize = { width: 300, height: 135 };
-  const duration = 0.35;
   const deafultDelay = 0.6;
-  const delayGap = 0.125;
-  const bezier: BezierValue = [0, 0, 0.2, 1];
+
+  const duration = 0.75;
+  const delayGap = 0.14;
+  const bezier = "super-accel";
+
+  // const duration = 0.35;
+  // const delayGap = 0.125;
+  // const bezier = "material-accel";
 
   return [
     [
@@ -81,7 +86,7 @@ function getMaskAnimation(
           },
         ],
         duration,
-        delay: deafultDelay + delayGap * 2,
+        delay: deafultDelay + delayGap * 3,
         bezier,
       },
       {
@@ -95,7 +100,7 @@ function getMaskAnimation(
           },
         ],
         duration,
-        delay: deafultDelay + delayGap * 3,
+        delay: deafultDelay + delayGap * 4.5,
         bezier,
       },
     ],
