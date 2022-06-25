@@ -36,11 +36,13 @@
         color: black;
         padding-right: 5px;
 
+        font-size: 14px;
+
         &:-ms-input-placeholder,
         &:-moz-placeholder,
         &::-webkit-input-placeholder,
         &::-moz-placeholder {
-          font-size: 13px;
+          font-size: 14px;
         }
       }
     }

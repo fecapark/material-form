@@ -17,6 +17,7 @@ export default class CircleButton extends Component {
   private readonly content: string;
   private readonly hiddenAtStart: boolean;
   private readonly customStyle: Record<string, string>;
+  private isDisabled: boolean = false;
   private ripple?: HTMLElement;
 
   constructor(
@@ -56,6 +57,16 @@ export default class CircleButton extends Component {
     this.container.style.fontSize = fontSize;
   }
 
+  toggleDisable(force?: boolean) {
+    if (force !== undefined) {
+      this.isDisabled = force;
+    } else {
+      this.isDisabled = !this.isDisabled;
+    }
+
+    this.removeRipple();
+  }
+
   toggleHidden() {
     const { width, height, fontSize }: Record<string, string> =
       this.customStyle;
@@ -75,11 +86,16 @@ export default class CircleButton extends Component {
 
   handleButtonEvent(e: PointerEvent) {
     e.stopPropagation();
+
+    if (this.isDisabled) return;
+
     this.onTouch();
   }
 
   renderRipple(e: PointerEvent) {
     e.stopPropagation();
+
+    if (this.isDisabled) return;
 
     this.removeRipple();
 

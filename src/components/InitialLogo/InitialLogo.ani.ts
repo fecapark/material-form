@@ -37,7 +37,7 @@ function getMaskAnimation(
   const resultSize = { width: 300, height: 135 };
   const deafultDelay = 0.6;
 
-  const duration = 0.75;
+  const duration = 0.55;
   const delayGap = 0.14;
   const bezier = "super-accel";
 

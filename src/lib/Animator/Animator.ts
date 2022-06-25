@@ -100,6 +100,7 @@ export default class Animator {
       onStart: customData.onStart ?? (() => {}),
       onEnd: customData.onEnd ?? (() => {}),
       pauseOnEnd: customData.pauseOnEnd ?? false,
+      reverse: customData.reverse ?? false,
     };
 
     checkDataFormat(resultData);
@@ -125,13 +126,14 @@ export default class Animator {
 
   private animate(ratio: number) {
     const animateStyles: Array<AnimationData.StyleData> = this.data.styles;
+    const reverse: boolean = this.data.reverse;
 
     animateStyles.forEach((aAnimateStyle, index) => {
       const { prop, fvalue }: AnimationData.StyleData = aAnimateStyle;
 
       const animatedValue: string = this.parseFormatedStyleString(
         fvalue,
-        this.getCurrentValuesAsRatio(index, ratio)
+        this.getCurrentValuesAsRatio(index, reverse ? 1 - ratio : ratio)
       );
 
       this.data.target.style.setProperty(prop, animatedValue);
@@ -145,7 +147,10 @@ export default class Animator {
     const animator: AnimatorClosure = () => {
       if (!startTime) startTime = new Date();
       const elapsedTime: number = (+new Date() - +startTime) / 1000;
-      const timeRatio: number = Math.min(elapsedTime / this.data.duration, 1);
+      const timeRatio: number = Math.max(
+        Math.min(elapsedTime / this.data.duration, 1),
+        0
+      );
 
       this.animate(bezier(timeRatio));
 

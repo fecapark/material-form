@@ -25,6 +25,7 @@ declare module "Animator-Type" {
       onStart?: OnFunction;
       onEnd?: OnFunction;
       pauseOnEnd?: boolean;
+      reverse?: boolean;
     }
 
     interface Parsed extends EssentialData {
@@ -33,6 +34,7 @@ declare module "Animator-Type" {
       onStart: OnFunction;
       onEnd: OnFunction;
       pauseOnEnd: boolean;
+      reverse: boolean;
     }
   }
 

@@ -4,6 +4,7 @@ import TagBlock from "../../Tag/TagBlock/TagBlock";
 import CircleButton from "../../Buttons/CircleButton/CircleButton";
 import { executeAnimation as resultProfileAnimation } from "./ResultProfileTrigger.ani";
 import { executeAnimation as backMaskAnimation } from "./BackMask.ani";
+import { executeAnimation as resultSubmitAnimation } from "./ResultSubmit.ani";
 import { Store } from "Store-Type";
 import LocalStorageManager from "../../../core/LocalStorage/localStorageManager";
 
@@ -19,8 +20,10 @@ interface HandleOptions {
 export default class HeadInfoCard extends Component {
   private readonly reRenderCardContainer: () => void;
   private isBackButtonTriggered: boolean = false;
+  private isSubmitButtonTriggered: boolean = false;
   private isResultProfileAnimationEnd: boolean = false;
   private resultProfileData: ResultProfileData = { name: "", tags: [] };
+  private submitButton: CircleButton | null = null;
 
   constructor(
     private readonly globalStore: Store.AbstractStore,
@@ -48,9 +51,19 @@ export default class HeadInfoCard extends Component {
   }
 
   private submit() {
-    console.log(this.globalStore.getState("logined"));
-    LocalStorageManager.set("logined", true);
+    // console.log(this.globalStore.getState("logined"));
+    // LocalStorageManager.set("logined", true);
     // console.log(LocalStorageManager.get("logined"));
+
+    this.isSubmitButtonTriggered = true;
+    this.submitButton!.toggleDisable(true);
+
+    requestAnimationFrame(() => {
+      resultSubmitAnimation(
+        this.container,
+        this.qs(".result-profile-container")!
+      );
+    });
   }
 
   private handleBackButton(e: PointerEvent) {
@@ -58,6 +71,7 @@ export default class HeadInfoCard extends Component {
 
     if (!this.isResultProfileAnimationEnd) return;
     if (this.isBackButtonTriggered) return;
+    if (this.isSubmitButtonTriggered) return;
 
     this.isBackButtonTriggered = true;
 
@@ -71,6 +85,12 @@ export default class HeadInfoCard extends Component {
   }
 
   render() {
+    this.submitButton = new CircleButton(this.submit.bind(this), {
+      content: '<i class="fa-solid fa-check"></i>',
+      shadowLevel: 2,
+      hiddenAtStart: true,
+    });
+
     if (!this.isResultProfileTriggered) {
       this.container.innerHTML = `
       <span class="title-text">반가워요.</span>
@@ -116,11 +136,7 @@ export default class HeadInfoCard extends Component {
 
       this.appendElementsTo(
         ".submit-button-wrapper",
-        new CircleButton(this.submit.bind(this), {
-          content: '<i class="fa-solid fa-check"></i>',
-          shadowLevel: 2,
-          hiddenAtStart: true,
-        }).container
+        this.submitButton!.container
       );
 
       this.qs(".back-button-wrapper")!.addEventListener(
