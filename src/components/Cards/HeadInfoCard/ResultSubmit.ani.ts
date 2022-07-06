@@ -251,8 +251,8 @@ function flipAnimation(
     ];
   };
 
-  const flipBlocks: Array<HTMLElement> = createFlipBlocks(4);
-  const flipDuration: number = 0.7;
+  const flipBlocks: Array<HTMLElement> = createFlipBlocks(3);
+  const flipDuration: number = 1;
   const flipGap: number = 0.1;
 
   return [

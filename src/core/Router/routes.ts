@@ -19,8 +19,8 @@ export class ROUTES {
       name: "logo",
       view: defaultView,
     },
-    "#signin": {
-      name: "signin",
+    "#signup": {
+      name: "signup",
       view: defaultView,
     },
     "#main": {

@@ -3,12 +3,14 @@ import { ROUTES } from "./core/Router/routes";
 import Router from "./core/Router/Router";
 import Component from "./core/Component/Component";
 import InitialLogo from "./components/InitialLogo/InitialLogo";
+import SignupContainer from "./components/SignupContainer/SignupContainer";
 import MainContainer from "./components/MainContainer/MainContainer";
 import LocalStorageManager from "./core/LocalStorage/localStorageManager";
 
 export default class App extends Component {
   private appRendered: boolean = false;
   private initialLogo!: InitialLogo;
+  private signupContainer!: SignupContainer;
   private mainContainer!: MainContainer;
 
   constructor() {
@@ -44,8 +46,8 @@ export default class App extends Component {
   private setViews() {
     ROUTES.setViewTo("#", this.renderHome.bind(this), this.container);
     ROUTES.setViewTo("#logo", this.renderLogo.bind(this), this.container);
-    ROUTES.setViewTo("#signin", this.renderSignIn.bind(this), this.container);
-    ROUTES.setViewTo("#main", this.renderDummyMain.bind(this), this.container);
+    ROUTES.setViewTo("#signup", this.renderSignup.bind(this), this.container);
+    ROUTES.setViewTo("#main", this.renderMain.bind(this), this.container);
   }
 
   private renderHome() {
@@ -60,28 +62,24 @@ export default class App extends Component {
     this.container.appendChild(this.initialLogo.container);
   }
 
-  private renderSignIn() {
+  private renderSignup() {
     if (LocalStorageManager.get("logined").parsed) {
       ROUTES.viewWithRedirect("#");
       return;
     }
 
-    this.mainContainer = new MainContainer(this.store);
-    this.container.appendChild(this.mainContainer.container);
+    this.signupContainer = new SignupContainer();
+    this.container.appendChild(this.signupContainer.container);
   }
 
-  private renderDummyMain() {
-    this.container.innerHTML = `
-      <div>You logined!</div>
-      <div>
-        <button>Logout</button>
-      </div>
-    `;
+  private renderMain() {
+    if (!LocalStorageManager.get("logined").parsed) {
+      ROUTES.viewWithRedirect("#signup");
+      return;
+    }
 
-    this.qs("button")!.addEventListener("pointerup", () => {
-      LocalStorageManager.set("logined", false);
-      ROUTES.viewWithRedirect("#signin");
-    });
+    this.mainContainer = new MainContainer();
+    this.container.appendChild(this.mainContainer.container);
   }
 
   render() {
@@ -98,7 +96,7 @@ export default class App extends Component {
     if (LocalStorageManager.get("logined").parsed) {
       ROUTES.viewWithRedirect("#main");
     } else {
-      ROUTES.viewWithRedirect("#signin");
+      ROUTES.viewWithRedirect("#signup");
     }
   }
 }

@@ -16,7 +16,7 @@ function getFadeOutAniamtion(
             to: () => [0],
           },
         ],
-        duration: 0.4,
+        duration: 0.3,
         delay: 3,
         bezier: [0.4, 0, 0.2, 1],
         onEnd: () => {
@@ -40,10 +40,6 @@ function getMaskAnimation(
   const duration = 0.55;
   const delayGap = 0.14;
   const bezier = "super-accel";
-
-  // const duration = 0.35;
-  // const delayGap = 0.125;
-  // const bezier = "material-accel";
 
   return [
     [

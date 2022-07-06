@@ -5,8 +5,8 @@ import CircleButton from "../../Buttons/CircleButton/CircleButton";
 import { executeAnimation as resultProfileAnimation } from "./ResultProfileTrigger.ani";
 import { executeAnimation as backMaskAnimation } from "./BackMask.ani";
 import { executeAnimation as resultSubmitAnimation } from "./ResultSubmit.ani";
-import { Store } from "Store-Type";
 import LocalStorageManager from "../../../core/LocalStorage/localStorageManager";
+import { ROUTES } from "../../../core/Router/routes";
 
 interface ResultProfileData {
   name: string;
@@ -25,10 +25,7 @@ export default class HeadInfoCard extends Component {
   private resultProfileData: ResultProfileData = { name: "", tags: [] };
   private submitButton: CircleButton | null = null;
 
-  constructor(
-    private readonly globalStore: Store.AbstractStore,
-    { reRenderCardContainer }: HandleOptions
-  ) {
+  constructor({ reRenderCardContainer }: HandleOptions) {
     super({ classNames: ["info-card", "head"] });
 
     this.reRenderCardContainer = reRenderCardContainer;
@@ -51,9 +48,7 @@ export default class HeadInfoCard extends Component {
   }
 
   private submit() {
-    // console.log(this.globalStore.getState("logined"));
-    // LocalStorageManager.set("logined", true);
-    // console.log(LocalStorageManager.get("logined"));
+    LocalStorageManager.set("logined", true);
 
     this.isSubmitButtonTriggered = true;
     this.submitButton!.toggleDisable(true);
@@ -61,7 +56,10 @@ export default class HeadInfoCard extends Component {
     requestAnimationFrame(() => {
       resultSubmitAnimation(
         this.container,
-        this.qs(".result-profile-container")!
+        this.qs(".result-profile-container")!,
+        () => {
+          ROUTES.viewWithRedirect("#main");
+        }
       );
     });
   }
