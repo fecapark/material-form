@@ -2,7 +2,7 @@
 
 [Project Link](https://fecapark.github.io/material-form/)
 
-[Demo](https://github.com/fecapark/material-form/assets/101973955/6ac66476-95f3-4f3e-98c2-1ce59e56d552)
+![Demo](https://github.com/fecapark/material-form/assets/101973955/eae7028e-cbaa-4d54-b948-591b44fe8060)
 
 <details>
 <summary>About</summary>
