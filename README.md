@@ -1,11 +1,19 @@
-# Material Todo List
+# Material Form
+
+by fecapark
+
+inspired by [Google Material Design Video](https://youtu.be/Q8TXgCzxEnw?si=_fTbD2VO4YCIZtPK)
+
+## Demo
 
 [Project Link](https://fecapark.github.io/material-form/)
 
 <img src="https://github.com/fecapark/material-form/assets/101973955/eae7028e-cbaa-4d54-b948-591b44fe8060" width="550px">
 
+### About Code
+
 <details>
-<summary>About</summary>
+<summary>Toogle</summary>
  
 ### Stack history
 
