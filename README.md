@@ -1,5 +1,12 @@
 # Material Todo List
 
+[Project Link](https://fecapark.github.io/material-form/)
+
+[화면-기록-2023-10-10-07.52.55.webm](https://github.com/fecapark/material-form/assets/101973955/dc997ece-dec9-42ef-926c-cb72a944213b)
+
+<details>
+<summary>About</summary>
+ 
 ### Stack history
 
 - `Flux Pattern` & `Pub/Sub Pattern` for vanila component
@@ -81,9 +88,4 @@ class RouterComponent extends Component {
 }
 ```
 
-## Todo
-
-1. main-page 라우팅 처리
-2. local storage 연결
-3. headcard fadeout 애니메이션 만들기
-4. main page 디자인 구상해보기
+</details>
