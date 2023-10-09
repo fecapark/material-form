@@ -2,7 +2,7 @@
 
 [Project Link](https://fecapark.github.io/material-form/)
 
-[화면-기록-2023-10-10-07.52.55.webm](https://github.com/fecapark/material-form/assets/101973955/dc997ece-dec9-42ef-926c-cb72a944213b)
+![화면-기록-2023-10-10-07 52 55](https://github.com/fecapark/material-form/assets/101973955/f657da45-24a8-4751-874f-12c8e1538f1e)
 
 <details>
 <summary>About</summary>
