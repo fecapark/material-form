@@ -1,6 +1,5 @@
 import { AnimationSequence } from "Animator-Type";
 import SequenceAnimator from "../../lib/Animator/SequenceAnimator";
-import LocalStorageManager from "../../core/LocalStorage/localStorageManager";
 
 function getFadeInAnimation(
   target: HTMLElement

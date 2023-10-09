@@ -1,6 +1,6 @@
 {
-  "name": "material-todo-list",
-  "description": "Material Designed todo list with Typescript, Vite, SCSS, Jest, etc.",
+  "name": "material-form",
+  "description": "Magic Paper Form by Google Material Design",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -22,7 +22,7 @@
     "typescript": "^4.5.4",
     "vite": "^2.9.9"
   },
-  "homepage": "https://fecapark.github.io/material-todo-list/",
+  "homepage": "https://fecapark.github.io/material-form/",
   "dependencies": {
     "bezier-easing": "^2.1.0",
     "dotenv": "^16.0.1"
