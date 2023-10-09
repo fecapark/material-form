@@ -54,7 +54,6 @@
     opacity: 1;
 
     display: flex;
-    align-items: center;
 
     color: $material-red-500;
     transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1),
@@ -62,7 +61,10 @@
 
     z-index: 10;
 
-    i {
+    .icon-container {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
       margin-right: 5px;
       font-size: 13px;
     }

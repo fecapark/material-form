@@ -17,9 +17,7 @@ const SCSS_OPTIONS = (): object => {
 export default defineConfig(({ command, mode }) => {
   if (command === "serve") {
     return {
-      base: `/proxy/${process.env.VITE_CODE_SERVER_DEV_PORT}/`,
       server: {
-        port: parseInt(process.env.VITE_CODE_SERVER_DEV_PORT),
         strictPort: true, // Prevent auto polling for restart
         hmr: {
           host: "ws",
@@ -33,13 +31,11 @@ export default defineConfig(({ command, mode }) => {
 
   if (mode === "preview-build") {
     return {
-      base: `/proxy/3000/proxy/${process.env.VITE_CODE_SERVER_DEV_PORT}/`,
       css: SCSS_OPTIONS(),
     };
   }
 
   return {
-    base: process.env.VITE_DEPLOY_PATH,
     css: SCSS_OPTIONS(),
   };
 });

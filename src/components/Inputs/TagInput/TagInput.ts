@@ -201,7 +201,9 @@ export default class TagInput extends Component {
     this.container.innerHTML = `
       <div class="tag-inline-container"></div>
       <div class="warn-container ${this.removeFromMaxAmount ? "" : "hidden"}">
-        <i class='fa-solid fa-circle-exclamation'></i>
+        <div class="icon-container">
+          <i class='fa-solid fa-circle-exclamation'></i>
+        </div>
         <span class='warn-text'>우선 5개까지만 기억해볼게요.</span>
       </div>
     `;

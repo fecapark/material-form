@@ -5,8 +5,6 @@ import CircleButton from "../../Buttons/CircleButton/CircleButton";
 import { executeAnimation as resultProfileAnimation } from "./ResultProfileTrigger.ani";
 import { executeAnimation as backMaskAnimation } from "./BackMask.ani";
 import { executeAnimation as resultSubmitAnimation } from "./ResultSubmit.ani";
-import LocalStorageManager from "../../../core/LocalStorage/localStorageManager";
-import { ROUTES } from "../../../core/Router/routes";
 
 interface ResultProfileData {
   name: string;
@@ -48,18 +46,13 @@ export default class HeadInfoCard extends Component {
   }
 
   private submit() {
-    LocalStorageManager.set("logined", true);
-
     this.isSubmitButtonTriggered = true;
     this.submitButton!.toggleDisable(true);
 
     requestAnimationFrame(() => {
       resultSubmitAnimation(
         this.container,
-        this.qs(".result-profile-container")!,
-        () => {
-          ROUTES.viewWithRedirect("#main");
-        }
+        this.qs(".result-profile-container")!
       );
     });
   }

@@ -8,6 +8,7 @@ const BEZIER_EASING_MAP: Record<string, BezierValue> = {
   "material-normal": [0.4, 0, 0.2, 1],
   "material-accel": [0, 0, 0.2, 1],
   "super-accel": [0.22, 0.68, 0, 1],
+  "new-super-accel": [0.83, 0, 0.17, 1],
 };
 
 export function getDummyAnimationData(delay: number): AnimationData.Custom {

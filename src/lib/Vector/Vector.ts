@@ -24,4 +24,10 @@ export class Vector2 {
 
     return new Vector2(this.x / num, this.y / num);
   }
+
+  dist(other: Vector2): number {
+    return Math.sqrt(
+      Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2)
+    );
+  }
 }

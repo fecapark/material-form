@@ -5,6 +5,8 @@ import {
   getShadowFormatValue,
   getShadowValue,
 } from "../../../lib/shadow/shadow";
+import { Vector2 } from "../../../lib/Vector/Vector";
+import { ROUTES } from "../../../core/Router/routes";
 
 function disableButtonAnimation(
   resultProfileContainer: HTMLElement
@@ -25,48 +27,10 @@ function disableButtonAnimation(
         },
       ],
       duration: 0.2,
+      onEnd: ({ target }) => {
+        target.style.cursor = "default";
+      },
     },
-    [
-      {
-        target: submitButton,
-        styles: [
-          {
-            prop: "width",
-            fvalue: "%x%",
-            from: () => [],
-            to: () => [0],
-          },
-        ],
-        duration: 0.3,
-        bezier: "material-accel",
-      },
-      {
-        target: submitButton,
-        styles: [
-          {
-            prop: "height",
-            fvalue: "%x%",
-            from: () => [],
-            to: () => [0],
-          },
-        ],
-        duration: 0.3,
-        bezier: "material-accel",
-      },
-      {
-        target: submitButton,
-        styles: [
-          {
-            prop: "font-size",
-            fvalue: "%xpx",
-            from: () => [],
-            to: () => [0],
-          },
-        ],
-        duration: 0.2,
-        bezier: "material-accel",
-      },
-    ],
   ];
 }
 
@@ -155,136 +119,76 @@ function fadeoutContentAnimation(
   ];
 }
 
-function flipAnimation(
+function scalingButtonAnimation(
   resultProfileContainer: HTMLElement
 ): Array<AnimationSequence.Custom> {
-  const createFlipBlocks = (num: number): Array<HTMLElement> => {
-    const flipBlocks: Array<HTMLElement> = [];
+  const submitButton: HTMLElement =
+    resultProfileContainer.querySelector(".circle-button")!;
 
-    for (let i = 0; i < num; i++) {
-      const bRect: DOMRect = resultProfileContainer.getBoundingClientRect();
-      const flipBlock: HTMLDivElement = document.createElement("div");
-      flipBlock.classList.add("flip-block");
-      flipBlock.style.width = `${bRect.width}px`;
-      flipBlock.style.height = `${bRect.height / num}px`;
+  let stageWidth: number = -1;
+  let stageHeight: number = -1;
+  let btnPos = new Vector2(0, 0);
 
-      const front: HTMLDivElement = document.createElement("div");
-      front.classList.add("front");
+  const setStageSize = () => {
+    stageWidth = document.body.clientWidth;
+    stageHeight = document.body.clientHeight;
 
-      const back: HTMLDivElement = document.createElement("div");
-      back.classList.add("back");
-
-      flipBlock.appendChild(front);
-      flipBlock.appendChild(back);
-
-      flipBlocks.push(flipBlock);
-    }
-
-    return flipBlocks;
+    const { x, y } = submitButton.getBoundingClientRect();
+    btnPos = new Vector2(x, y);
   };
 
-  const getFlipAnimation = (
-    element: HTMLElement,
-    duration: number,
-    startDelay: number
-  ) => {
-    const hoverShadowDuration: number = 0.05;
-    const flipHoverDurationRatio: number = 0.2;
+  const calculateTargetScale = () => {
+    if (stageWidth < 0 || stageHeight < 0) setStageSize();
 
-    return [
+    const ENSURE_SCALE_FACTOR = 1.0;
+
+    const btnRadius = 60 / 2;
+    const tl = btnPos.dist(new Vector2(0, 0)) / btnRadius;
+    const tr = btnPos.dist(new Vector2(stageWidth, 0)) / btnRadius;
+    const bl = btnPos.dist(new Vector2(0, stageHeight)) / btnRadius;
+    const br = btnPos.dist(new Vector2(stageWidth, stageHeight)) / btnRadius;
+
+    return Math.max(tl, tr, bl, br) * ENSURE_SCALE_FACTOR;
+  };
+
+  window.removeEventListener("resize", setStageSize);
+  window.addEventListener("resize", setStageSize);
+
+  return [
+    [
       {
-        target: element,
+        target: submitButton,
         styles: [
           {
             prop: "transform",
-            fvalue: "rotate3d(1, 0, 0, %xdeg)",
-            from: () => [0],
-            to: () => [-180],
+            fvalue: "scale(%x)",
+            from: () => [1],
+            to: () => [calculateTargetScale()],
           },
         ],
-        duration: duration,
-        delay: startDelay,
-        bezier: "super-accel",
-      },
-      {
-        target: element,
-        styles: [
-          {
-            prop: "box-shadow",
-            fvalue: "0 %xpx %xpx %xpx rgba(0, 0, 0, %x)",
-            from: () => [0, 0, 0, 0],
-            to: () => [4.5, 15, -3.5, 0.5],
-          },
-        ],
-        duration: hoverShadowDuration,
-        delay: startDelay,
-      },
-      {
-        target: element,
-        styles: [
-          {
-            prop: "box-shadow",
-            fvalue: "0 %xpx %xpx %xpx rgba(0, 0, 0, %x)",
-            from: () => [],
-            to: () => [36, 33.75, -22.5, 0.5],
-          },
-        ],
-        duration: (duration - hoverShadowDuration) * flipHoverDurationRatio,
-        delay: startDelay + hoverShadowDuration,
-      },
-      {
-        target: element,
-        styles: [
-          {
-            prop: "box-shadow",
-            fvalue: "0 %xpx %xpx %xpx rgba(0, 0, 0, %x)",
-            from: () => [],
-            to: () => [0, 0, 0, 0],
-          },
-        ],
-        duration: (duration - hoverShadowDuration) * flipHoverDurationRatio,
-        delay:
-          startDelay +
-          hoverShadowDuration +
-          (duration - hoverShadowDuration) * flipHoverDurationRatio,
-      },
-    ];
-  };
-
-  const flipBlocks: Array<HTMLElement> = createFlipBlocks(3);
-  const flipDuration: number = 1;
-  const flipGap: number = 0.1;
-
-  return [
-    {
-      target: resultProfileContainer,
-      styles: [
-        {
-          prop: "opacity",
-          fvalue: "%x",
-          from: () => [1],
-          to: () => [1],
+        bezier: "new-super-accel",
+        duration: 1,
+        onStart: () => {
+          document.getElementById("app")!.style.overflow = "hidden";
         },
-      ],
-      duration: 0.3,
-      onStart: ({ target }) => {
-        target.innerHTML = "";
-
-        target.style.display = "flex";
-        target.style.flexWrap = "nowrap";
-        target.style.padding = "0";
-        target.style.perspective = "100vw";
-        target.style.perspectiveOrigin = "50% 50%";
-        target.style.backgroundColor = "#eeedef";
-
-        flipBlocks.forEach((aFlipBlock) => target.appendChild(aFlipBlock));
+        onEnd: () => {
+          window.removeEventListener("resize", setStageSize);
+        },
       },
-    },
-    flipBlocks
-      .map((aFlipBlock, idx) =>
-        getFlipAnimation(aFlipBlock, flipDuration, flipGap * idx)
-      )
-      .flat(),
+      {
+        target: submitButton,
+        styles: [
+          {
+            prop: "box-shadow",
+            fvalue: getShadowFormatValue(),
+            from: () => [],
+            to: () => getShadowValue(0),
+          },
+        ],
+        bezier: [0.2, 0, 0, 1],
+        duration: 0.3,
+      },
+    ],
   ];
 }
 
@@ -297,10 +201,12 @@ export function executeAnimation(
     [
       ...disableButtonAnimation(resultProfileContainer),
       ...fadeoutContentAnimation(headCard, resultProfileContainer),
-      ...flipAnimation(resultProfileContainer),
+      ...scalingButtonAnimation(resultProfileContainer),
     ],
     () => {
       onEnd();
+      ROUTES.viewWithRedirect("#logo");
+      document.getElementById("app")!.style.overflow = "";
     }
   ).play();
 }

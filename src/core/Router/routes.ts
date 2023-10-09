@@ -23,10 +23,6 @@ export class ROUTES {
       name: "signup",
       view: defaultView,
     },
-    "#main": {
-      name: "main",
-      view: defaultView,
-    },
   };
 
   static setViewTo(

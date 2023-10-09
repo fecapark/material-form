@@ -106,7 +106,9 @@ export default class TextInput extends Component {
       <span class="${this.placeholderElementClassName}">${this.placeholder}</span>
     </div>
     <div class="warn-container hidden">
-      <i class='fa-solid fa-circle-exclamation'></i>
+      <div class="icon-container">
+        <i class='fa-solid fa-circle-exclamation'></i>
+      </div>
       <span class='warn-text'>이름이 너무 긴 것 같아요.</span>
     </div>
     `;

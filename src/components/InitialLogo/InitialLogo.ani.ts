@@ -1,5 +1,27 @@
 import { AnimationSequence } from "Animator-Type";
 import SequenceAnimator from "../../lib/Animator/SequenceAnimator";
+import LocalStorageManager from "../../core/LocalStorage/localStorageManager";
+
+function getFadeInAnimation(
+  target: HTMLElement
+): Array<AnimationSequence.Custom> {
+  return [
+    {
+      target,
+      styles: [
+        {
+          prop: "opacity",
+          fvalue: "%x",
+          from: () => [0],
+          to: () => [1],
+        },
+      ],
+      duration: 0.3,
+      delay: 1,
+      bezier: [0.4, 0, 0.2, 1],
+    },
+  ];
+}
 
 function getFadeOutAniamtion(
   target: HTMLElement
@@ -105,10 +127,14 @@ function getMaskAnimation(
 
 export function executeAnimation(
   rootTarget: HTMLElement,
+  isShowedOnce: boolean,
   whenEnd: () => void = () => {}
 ) {
   new SequenceAnimator(
     [
+      ...(isShowedOnce
+        ? getFadeInAnimation(rootTarget.querySelector("#logo-text-container")!)
+        : []),
       ...getFadeOutAniamtion(rootTarget.querySelector("#logo-text-container")!),
       ...getMaskAnimation(rootTarget.querySelectorAll(".mask")),
     ],

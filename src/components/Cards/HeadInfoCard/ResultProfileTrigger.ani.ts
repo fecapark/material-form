@@ -12,10 +12,6 @@ function getTopMarginForNameInfo(headCard: HTMLElement): number {
 
   const hcBRect: DOMRect = headCard.getBoundingClientRect();
   const incBRect: DOMRect = infoNameContainer.getBoundingClientRect();
-
-  console.log(hcBRect.height, incBRect.height);
-  console.log((hcBRect.height - incBRect.height) / 2);
-
   const resultMargin: number = (hcBRect.height - incBRect.height) / 2;
 
   return resultMargin;
