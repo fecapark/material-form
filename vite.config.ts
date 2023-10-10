@@ -29,13 +29,8 @@ export default defineConfig(({ command, mode }) => {
     };
   }
 
-  if (mode === "preview-build") {
-    return {
-      css: SCSS_OPTIONS(),
-    };
-  }
-
   return {
+    base: "/material-form/",
     css: SCSS_OPTIONS(),
   };
 });
