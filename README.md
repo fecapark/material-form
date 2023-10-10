@@ -8,7 +8,7 @@ inspired by [Google Material Design Video](https://youtu.be/Q8TXgCzxEnw?si=_fTbD
 
 [Project Link](https://fecapark.github.io/material-form/)
 
-<img src="https://github.com/fecapark/material-form/assets/101973955/eae7028e-cbaa-4d54-b948-591b44fe8060" width="550px">
+<img src="https://github.com/fecapark/material-form/assets/101973955/eae7028e-cbaa-4d54-b948-591b44fe8060" width="550px" alt="wait...">
 
 ### About Code
 
